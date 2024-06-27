@@ -11,7 +11,7 @@ const ContentSettings = ({ attributes, setAttributes,device }) => {
  
   return (
     <>
-      <PanelBody title={__('Map Marker', 'open-street-map')} initialOpen={true}>
+      <PanelBody title={__('Map Marker', 'open-street-map')} initialOpen={false}>
         {/* Width */}
         <div>
           <div className='customWidth'>

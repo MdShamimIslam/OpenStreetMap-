@@ -3,7 +3,7 @@ import React,{useState} from 'react'
 
 const NOM_URL = "https://nominatim.openstreetmap.org/search?";
 
-const Search = () => {
+const Search = ({ setSelectPosition }) => {
   const [searchText, setSearchText] = useState('');
   const [listPlace, setListPlace] = useState([]);
 
@@ -42,7 +42,11 @@ const Search = () => {
       <div>
         {
           listPlace.map(item => (
-            <div key={item.osm_id} style={{display:"flex",alignItems:"center",gap:"5px"}}>
+            <div
+              onClick={()=>setSelectPosition(item)}
+              key={item.place_id}
+              style={{ display: "flex", alignItems: "center", gap: "5px",cursor:"pointer" }}
+            >
               <img style={{ width: "30px" }} src="https://image.similarpng.com/very-thumbnail/2021/09/Gps-icon-on-center-of-the-city-map-with-pin-location-on-transparent-background-PNG.png" alt="placeholder" />
               <p>{item.display_name}</p>
             </div>
