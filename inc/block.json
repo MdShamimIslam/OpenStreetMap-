@@ -1,0 +1,46 @@
+{
+  "apiVersion": "1",
+  "name": "osm/open-street-map",
+  "title": "Open Street Map",
+  "description": "Description of OSM (Open Street Map) Block.",
+  "category": "widgets",
+  "keywords": ["OSM","osm", "Open Street Map", "open","Open","Map","map"],
+  "textdomain": "osm-block",
+  "attributes": {
+    "cId": {
+      "type": "string",
+      "default": ""
+    },
+    "osmInfo":{
+      "type":"object",
+      "default":{
+        "width": {
+            "desktop": "",
+            "tablet": "",
+            "mobile": ""
+          },
+        "height": {
+            "desktop": "",
+            "tablet": "",
+            "mobile": ""
+          }
+      }
+    }
+    
+  },
+  "supports": {
+    "align": ["wide", "full"],
+    "html": false
+  },
+  "example": {
+    "attributes": {
+      "preview": true,
+      "columns": {
+        "desktop": 1,
+        "tablet": 1,
+        "mobile": 1
+      }
+    }
+  },
+  "editorScript": "file:./../dist/editor.js"
+}
