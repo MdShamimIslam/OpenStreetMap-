@@ -2,7 +2,7 @@
   "apiVersion": "1",
   "name": "osm/open-street-map",
   "title": "Open Street Map",
-  "description": "Description of OSM (Open Street Map) Block.",
+  "description": "Enhance your WordPress site with interactive OpenStreetMap (OSM) blocks.",
   "category": "widgets",
   "keywords": ["OSM","osm", "Open Street Map", "open","Open","Map","map"],
   "textdomain": "osm-block",
@@ -15,15 +15,91 @@
       "type":"object",
       "default":{
         "width": {
-            "desktop": "",
+            "desktop": "1275px",
             "tablet": "",
             "mobile": ""
           },
         "height": {
-            "desktop": "",
+            "desktop": "600px",
             "tablet": "",
             "mobile": ""
-          }
+          },
+        "border":{},
+        "padding": {
+          "desktop": {},
+          "tablet": {},
+          "mobile": {}
+        },
+        "scrollZoom":true,
+        "marker":{
+          "markUrl":"https://png.pngtree.com/png-clipart/20230123/original/pngtree-flat-red-location-sign-png-image_8927579.png",
+          "srcText":""
+        },
+        "map":{
+            "width": {
+              "desktop": "800px",
+              "tablet": "",
+              "mobile": ""
+           },
+            "height": {
+              "desktop": "600px",
+              "tablet": "",
+              "mobile": ""
+            },
+            "mapBorder":{}
+        },
+        "mapSearch":{
+          "selectField":"input",
+          "width": {
+              "desktop": "465px",
+              "tablet": "",
+              "mobile": ""
+           },
+          "input":{
+            "width": {
+              "desktop": "100%",
+              "tablet": "",
+              "mobile": ""
+           },
+            "height": {
+              "desktop": "",
+              "tablet": "",
+              "mobile": ""
+          },
+            "padding": {
+              "desktop": {"top":"5px","right":"5px","bottom":"5px","left":"5px"},
+              "tablet": {"top":"5px","right":"5px","bottom":"5px","left":"5px"},
+              "mobile": {"top":"5px","right":"5px","bottom":"5px","left":"5px"}
+          },
+          "radius":5
+          },
+          "srcBtn":{
+            "srcPadding": {
+                "desktop": {},
+                "tablet": {},
+                "mobile": {}
+            },
+            "srcColors":{
+              "color":"white",
+              "bg":"#4527a4"
+            },
+            "srcHoverColors":{
+              "color":"white",
+              "bg":"#167580"
+            },
+            "srcText":{
+              "text":"Search",
+              "typo":{}
+            },
+            "srcRadius":5
+            },
+            "location":{
+              "colors":{"color":"", "bg":""},
+              "hoverColor":"#055B5B",
+              "locRadius":5,
+              "locTypo":{}
+            }
+        }
       }
     }
     

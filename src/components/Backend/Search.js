@@ -22,7 +22,6 @@ const Search = ({ setSelectPosition }) => {
     fetch(`${NOM_URL}${queryString}`, requestOptions)
       .then(res => res.text())
       .then(result => {
-        console.log(JSON.parse(result));
         setListPlace(JSON.parse(result));
       })
       .catch(error => console.log("Error is :", error));
@@ -30,15 +29,18 @@ const Search = ({ setSelectPosition }) => {
   
   return (
     <div style={{display:"flex",flexDirection:"column"}}>
-      <div style={{display:"flex"}}>
-        <div className='SearchTxt'>
+      <div style={{ display: "flex" }}>
+        {/* input field */}
+        <div className='searchTxt'>
           <input value={searchText} onChange={(event)=>setSearchText(event.target.value)} type="text" placeholder='Search Your Location...'
           />
         </div>
-        <div className='SearchBtn'>
+        {/* button */}
+        <div className='searchBtn'>
           <button onClick={handleSearch}>Search Here</button>
         </div>
       </div>
+      {/* show location */}
       <div>
         {
           listPlace.map(item => (
@@ -48,7 +50,7 @@ const Search = ({ setSelectPosition }) => {
               style={{ display: "flex", alignItems: "center", gap: "5px",cursor:"pointer" }}
             >
               <img style={{ width: "30px" }} src="https://image.similarpng.com/very-thumbnail/2021/09/Gps-icon-on-center-of-the-city-map-with-pin-location-on-transparent-background-PNG.png" alt="placeholder" />
-              <p>{item.display_name}</p>
+              <p className='placeDisName'>{item.display_name}</p>
             </div>
           ))
         }

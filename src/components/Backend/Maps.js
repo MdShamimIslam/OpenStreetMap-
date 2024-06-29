@@ -1,8 +1,8 @@
-import React,{useEffect} from 'react';
+import React, { useEffect } from 'react';
 import { MapContainer, Marker, Popup, TileLayer, useMap } from 'react-leaflet';
 import "leaflet/dist/leaflet.css";
 import L from 'leaflet';
- 
+
 const icon = L.icon({
   iconUrl: "https://png.pngtree.com/png-clipart/20230123/original/pngtree-flat-red-location-sign-png-image_8927579.png",
   iconSize: [38, 38]
@@ -29,27 +29,36 @@ function ResetCenterView(props) {
   return null;
 }
 
-const Maps = ({ selectPosition }) => {
-  const locationSelection = [selectPosition?.lat, selectPosition?.lon]
+const Maps = ({ selectPosition, attributes}) => {
+  const { scrollZoom } = attributes.osmInfo;
+  const { radius } = attributes.osmInfo.map;
+  const locationSelection = [selectPosition?.lat, selectPosition?.lon];
+  
   return (
-    
-    <MapContainer center={position} zoom={8} style={{width:"100%",height:"100%"}}>
-        <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          url="https://api.maptiler.com/maps/basic/256/{z}/{x}/{y}.png?key=YEI95Jvk57zAEnNOTx8u"
-        />
+    <MapContainer
+      center={position}
+      zoom={8}
+      scrollWheelZoom={scrollZoom}
+      style={{ width: "100%", height: "100%", borderRadius: `${radius}px`}}
+    >
+      <TileLayer
+        attribution='&copy; <a href="https://www.bplugins.com/">bPlugins</a> contributors'
+        url="https://api.maptiler.com/maps/basic/256/{z}/{x}/{y}.png?key=YEI95Jvk57zAEnNOTx8u"
+      />
       {
         selectPosition && (
           <Marker position={locationSelection} icon={icon}>
             <Popup>
-              A pretty CSS3 popup. <br /> Easily customizable.
+              Your Perfect location here
             </Popup>
           </Marker>
         )
       }
       <ResetCenterView selectPosition={selectPosition} />
-      </MapContainer>
-    
+    </MapContainer>
+
+
+
   );
 };
 

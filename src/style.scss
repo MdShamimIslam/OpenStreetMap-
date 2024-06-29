@@ -11,7 +11,28 @@
 	color: #4524a4;
 }
 
+.colorsPar{
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
 
+.mediaBtn{
+	background: #4527a4;
+	color: white;
+	height: 32px;
+	margin-top: 16px;
+	margin-left:-5px
+}
+.searchConBtn{
+	background: #4527a4;
+	color: white;
+	border-radius:3px;
+  border:none;
+  cursor: pointer;
+	padding: 5px;
+	width: 100px;
+}
 
 
 

@@ -1,50 +1,12 @@
-// main osm style
-.mainOsm{
-  display:flex;
-  flex-direction: row;
-  gap: 13px;
-  width: 1500px;
-  height: 1000px;
-}
-// maps style
-.maps{
-  width: 800px;
-  height: 1000px;
-}
-// search style
-.search{
-  width: 465px;
-}
-.SearchBtn {
-  margin-left: 5px;
-}
-.SearchBtn button{
-  background-color: #4527a4;
-  color: #ffffff;
-  padding: 10px 15px;
-  border-radius: 5px;
-  border:none;
-}
-.SearchTxt{
+.searchTxt{
   flex:1;
 }
-.search-input::placeholder {
-    padding-left: 5px;
+.searchBtn {
+  margin-left: 5px;
 }
-.SearchTxt input{
-  width:100%;
-  padding: 5px;
+.searchBtn button{
+  padding: 10px 15px;
 }
-
-
-
-
-
-
-
-
-
-
 
 
 $primaryColor: #4527a4;

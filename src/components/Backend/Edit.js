@@ -6,10 +6,13 @@ import StylesSettings from '../Settings/StylesSettings/StylesSettings';
 import OsmBack from './OsmBack';
 import { withSelect } from '@wordpress/data';
 
+
 const Edit = props => {
 	const { attributes, setAttributes, clientId, device } = props;
-	
+
 	useEffect(() => { clientId && setAttributes({ cId: clientId.substring(0, 10) }); }, [clientId]);
+	
+
 	return (
 
 		<>
@@ -29,13 +32,13 @@ const Edit = props => {
 					]}>
 					{(tab) => (
 						<>
-							{tab.name === 'tab1' && <ContentSettings attributes={attributes} setAttributes={setAttributes} device={device} />}
-							{tab.name === 'tab2' && <StylesSettings attributes={attributes} setAttributes={setAttributes} />}
+							{tab.name === 'tab1' && <ContentSettings attributes={attributes} setAttributes={setAttributes} device={device}/>}
+							{tab.name === 'tab2' && <StylesSettings attributes={attributes} setAttributes={setAttributes} device={device}  />}
 						</>
 					)}
 				</TabPanel>
 			</InspectorControls>
-			<OsmBack attributes={attributes} setAttributes={setAttributes} device={device} />
+			<OsmBack attributes={attributes} setAttributes={setAttributes} device={device}/>
 		</>
 	)
 
