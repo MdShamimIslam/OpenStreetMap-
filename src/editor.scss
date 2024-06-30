@@ -1,16 +1,10 @@
-.searchTxt{
-  flex:1;
-}
-.searchBtn {
-  margin-left: 5px;
-}
-.searchBtn button{
-  padding: 10px 15px;
-}
-
 
 $primaryColor: #4527a4;
 
+// .searchTxt input {
+//   padding: 10px;
+//   margin-right: 20px;
+// }
 .prefixNowEditing {
 	outline: 2px solid $primaryColor;
 }
@@ -26,7 +20,7 @@ $primaryColor: #4527a4;
 
 // TAB PANEL style
 .components-button.components-tab-panel__tabs-item {
-  font-size: 15px;
+  font-size: 12px;
   width: 100%;
   display: flex;
   justify-content: center;

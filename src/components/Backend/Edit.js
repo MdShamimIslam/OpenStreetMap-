@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { InspectorControls } from "@wordpress/block-editor";
 import { TabPanel } from "@wordpress/components";
 import ContentSettings from '../Settings/ContentSettings/ContentSettings';
@@ -9,9 +9,9 @@ import { withSelect } from '@wordpress/data';
 
 const Edit = props => {
 	const { attributes, setAttributes, clientId, device } = props;
+	const [mapView, setMapView] = useState('default');
 
 	useEffect(() => { clientId && setAttributes({ cId: clientId.substring(0, 10) }); }, [clientId]);
-	
 
 	return (
 
@@ -32,13 +32,13 @@ const Edit = props => {
 					]}>
 					{(tab) => (
 						<>
-							{tab.name === 'tab1' && <ContentSettings attributes={attributes} setAttributes={setAttributes} device={device}/>}
+							{tab.name === 'tab1' && <ContentSettings mapView={mapView} setMapView={setMapView} attributes={attributes} setAttributes={setAttributes} device={device}/>}
 							{tab.name === 'tab2' && <StylesSettings attributes={attributes} setAttributes={setAttributes} device={device}  />}
 						</>
 					)}
 				</TabPanel>
 			</InspectorControls>
-			<OsmBack attributes={attributes} setAttributes={setAttributes} device={device}/>
+			<OsmBack attributes={attributes} mapView={mapView} setMapView={setMapView} setAttributes={setAttributes} device={device}/>
 		</>
 	)
 

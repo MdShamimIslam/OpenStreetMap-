@@ -1,5 +1,13 @@
-
-.customWidth{
+.searchTxt{
+  flex:1;
+}
+.searchBtn {
+  margin-left: 5px;
+}
+.searchBtn button{
+  padding: 10px 15px;
+}
+.customWidth,.colorsPar{
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
@@ -9,12 +17,6 @@
 	margin-bottom: -5px;
 	font-weight: 500;
 	color: #4524a4;
-}
-
-.colorsPar{
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
 }
 
 .mediaBtn{
@@ -34,10 +36,53 @@
 	width: 100px;
 }
 
+// map type layer
+.mapViewSwitch {
+  display: flex;
+  align-items: center;
+  background: white;
+  border: 2px solid rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.65);
+}
+
+.mapViewSwitch .mapViewBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.mapViewSwitch .mapViewBtn img {
+  width: 20px;
+  height: 20px;
+}
+
+.mapViewSwitch .vertical-divider {
+  width: 1px;
+  height: 20px;
+  background: #ccc;
+  margin: 0 10px;
+}
+
+.mapViewSwitch .mapViewBtn.active {
+  background-color: #4527a4;
+	color:white;
+  
+}
 
 
+// padding, border, outline, box-shadow
+// :hover, :focus, :active
 
-
+.searchTxt input{
+	border: 1px solid #ccc;
+	outline: #4524a4;
+	box-shadow: 5px;
+}
 
 
 $primaryColor: #4527a4;

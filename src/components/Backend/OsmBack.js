@@ -5,8 +5,6 @@ import "leaflet/dist/leaflet.css";
 import L from 'leaflet';
 
 const NOM_URL = "https://nominatim.openstreetmap.org/search?";
-const url = "https://png.pngtree.com/png-clipart/20230123/original/pngtree-flat-red-location-sign-png-image_8927579.png";
-
 const position = [51.505, -0.09];
 
 function ResetCenterView(props) {
@@ -28,25 +26,66 @@ function ResetCenterView(props) {
   return null;
 }
 
-const OsmBack = ({ attributes}) => {
+const MapViewSwitch = ({ defaultView, setMapView }) => {
+  const map = useMap();
+  const [activeView, setActiveView] = useState(defaultView); 
+
+  useEffect(() => {
+    setActiveView(defaultView); 
+  }, [defaultView]);
+
+  useEffect(() => {
+    const mapViewSwitchDiv = L.control({ position: 'topright' });
+    mapViewSwitchDiv.onAdd = () => {
+      const div = L.DomUtil.create('div', 'leaflet-bar mapViewSwitch');
+      div.innerHTML = `
+        <button class="mapViewBtn ${activeView === 'default' ? 'active' : ''}" id="defaultView">
+          Default
+        </button>
+        <div class="vertical-divider"></div>
+        <button class="mapViewBtn ${activeView === 'satellite' ? 'active' : ''}" id="satelliteView">
+          Satellite
+        </button>
+      `;
+      L.DomEvent.on(div, 'click', (e) => {
+        if (e.target.closest('#defaultView')) {
+          setMapView('default');
+          setActiveView('default');
+        } else if (e.target.closest('#satelliteView')) {
+          setMapView('satellite');
+          setActiveView('satellite');
+        }
+      });
+      return div;
+    };
+    mapViewSwitchDiv.addTo(map);
+
+    return () => mapViewSwitchDiv.remove();
+  }, [map, setMapView, activeView]);
+
+  return null;
+};
+
+const OsmBack = ({ attributes, mapView, setMapView }) => {
   const [selectPosition, setSelectPosition] = useState(null);
   const [searchText, setSearchText] = useState('');
   const [listPlace, setListPlace] = useState([]);
   const locationSelection = [selectPosition?.lat, selectPosition?.lon];
-  const { cId } = attributes;
-  const { scrollZoom } = attributes.osmInfo;
+  const { cId, osmInfo } = attributes;
+  const { scrollZoom,marker } = osmInfo;
+  const { markUrl } = marker;
   const { text } = attributes.osmInfo.mapSearch.srcBtn.srcText;
+ 
   // marker info
   const icon = L.icon({
-    // iconUrl: `"${markUrl}"`,
-    iconUrl: url,
+    iconUrl: markUrl,
     iconSize: [38, 38]
   });
 
   // Handle Search
-  const handleSearch = () => {
+  const handleSearch = (query) => {
     const params = {
-      q: searchText,
+      q: query,
       format: 'json',
       addressDetails: 1,
       polygon_geojson: 0
@@ -64,10 +103,16 @@ const OsmBack = ({ attributes}) => {
       .catch(error => console.log("Error is :", error));
   }
 
+  // Update handleSearch call on input change
+  const handleInputChange = (event) => {
+    setSearchText(event.target.value);
+    handleSearch(event.target.value);
+  }
+
   return (
     <>
       <Style attributes={attributes}></Style>
-      <div id={`osmHelloBlock-${cId}`} className='mainOsm'>
+      <div  id={`osmHelloBlock-${cId}`}>
         {/* map */}
         <div className='maps'>
           <MapContainer
@@ -76,22 +121,31 @@ const OsmBack = ({ attributes}) => {
             scrollWheelZoom={scrollZoom}
             className='mapContainer'
           >
-            <TileLayer
-              attribution='&copy; <a href="https://www.bplugins.com/">bPlugins</a> contributors'
-              url="https://api.maptiler.com/maps/basic/256/{z}/{x}/{y}.png?key=YEI95Jvk57zAEnNOTx8u"
-            />
+            
+            {mapView === 'default' ? (
+              <TileLayer
+                attribution='&copy; <a href="https://www.bplugins.com/">bPlugins</a> contributors'
+                url="https://api.maptiler.com/maps/basic/256/{z}/{x}/{y}.png?key=YEI95Jvk57zAEnNOTx8u"
+              />
+            ) : (
+              <TileLayer
+                attribution='&copy; <a href="https://www.bplugins.com/">bPlugins</a> contributors'
+                url="https://api.maptiler.com/maps/hybrid/256/{z}/{x}/{y}.jpg?key=YEI95Jvk57zAEnNOTx8u"
+              />
+            )}
             {
               selectPosition && (
                 <Marker position={locationSelection} icon={icon}>
                   <Popup>
-                    Your Perfect location here
+                   {searchText}
                   </Popup>
                 </Marker>
               )
             }
             <ResetCenterView selectPosition={selectPosition} />
-          </MapContainer>
+            <MapViewSwitch defaultView="default" setMapView={setMapView} />
 
+          </MapContainer>
         </div>
         {/* Search */}
         <div className='search'>
@@ -99,12 +153,15 @@ const OsmBack = ({ attributes}) => {
             <div style={{ display: "flex" }}>
               {/* input field */}
               <div className='searchTxt'>
-                <input value={searchText} onChange={(event) => setSearchText(event.target.value)} type="text" placeholder='Search Your Location...'
+                <input
+                  value={searchText}
+                  onChange={handleInputChange}
+                  type="text" placeholder='Search Your Location...'
                 />
               </div>
               {/* button */}
               <div className='searchBtn'>
-                <button onClick={handleSearch}>{text}</button>
+                <button onClick={() => handleSearch(searchText)}>{text}</button>
               </div>
             </div>
             {/* show location */}

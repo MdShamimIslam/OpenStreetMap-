@@ -1,22 +1,31 @@
 
 
-import { Button, PanelBody, TextControl, ToggleControl } from '@wordpress/components';
+import { Button, PanelBody, SelectControl, TextControl, ToggleControl } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import { updateData } from '../../../utils/functions';
 import { MediaUpload } from "@wordpress/block-editor";
+import { mapTypeOptions } from '../../../utils/options';
 
 
-const ContentSettings = ({ attributes, setAttributes }) => {
+const ContentSettings = ({ attributes, setAttributes, mapView, setMapView }) => {
   const { osmInfo } = attributes;
-  const { scrollZoom, marker } = osmInfo;
+  const { scrollZoom, marker} = osmInfo;
   const { markUrl } = marker;
   
 
   return (
     <>
-      <PanelBody title={__('Map Marker', 'open-street-map')} initialOpen={false}>
+      <PanelBody title={__('Map', 'open-street-map')} initialOpen={false}>
+        {/* map type */}
+        <div>
+          <p className='widthChild' style={{ marginBottom: "8px" }}>Type</p>
+          <SelectControl
+            value={mapView}
+            options={mapTypeOptions}
+            onChange={(v) => setMapView(v)}
+          />
+        </div>
         {/* Upload marker */}
-
         <div style={{ display: "flex", alignItems: "center", marginTop: "10px" }} >
           {/* marker url control */}
           <div>

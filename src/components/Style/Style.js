@@ -13,6 +13,7 @@ const Style = ({ attributes }) => {
   const mapWrapper = `${mainWrapper} .maps`;
   const searchWrapper = `${mainWrapper} .search`;
   const locationWrapper = `${mainWrapper} .location`;
+
   return (
     <style>
 
@@ -27,7 +28,8 @@ const Style = ({ attributes }) => {
           gap: 13px;
           width: ${osmInfo.width.desktop};
           height: ${osmInfo.height.desktop};
-          ${getBoxCss(padding.desktop, "padding")}
+          ${getBoxCss(padding.desktop, "padding")};
+          justify-content:center;
           
         } 
        
@@ -43,6 +45,7 @@ const Style = ({ attributes }) => {
         ${searchWrapper} .searchTxt input{
           width: ${input.width.desktop};
           height: ${input.height.desktop};
+          box-sizing: border-box;
           ${getBoxCss(input.padding.desktop, "padding")}
           border-radius:${input.radius}px;
         }

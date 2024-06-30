@@ -36,6 +36,7 @@
           "srcText":""
         },
         "map":{
+            "mapType":"default",
             "width": {
               "desktop": "800px",
               "tablet": "",
@@ -62,7 +63,7 @@
               "mobile": ""
            },
             "height": {
-              "desktop": "",
+              "desktop": "100%",
               "tablet": "",
               "mobile": ""
           },
