@@ -5,7 +5,7 @@
   "description": "Enhance your WordPress site with interactive OpenStreetMap (OSM) blocks.",
   "category": "widgets",
   "keywords": ["OSM","osm", "Open Street Map", "open","Open","Map","map"],
-  "textdomain": "osm-block",
+  "textdomain": "openStreetMap",
   "attributes": {
     "cId": {
       "type": "string",

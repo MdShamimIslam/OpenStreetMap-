@@ -12,7 +12,7 @@ class OSMHelloBlock{
 			'render_callback'	=> [$this, 'render']
 		] ); // Register Block
 
-		wp_set_script_translations( 'osm-hello-editor-script', 'osm-block', OSM_DIR_PATH . 'languages' );
+		wp_set_script_translations( 'osm-hello-editor-script', 'openStreetMap', OSM_DIR_PATH . 'languages' );
 	}
 
 	function render( $attributes ){
@@ -20,7 +20,7 @@ class OSMHelloBlock{
 
 		wp_enqueue_style( 'osm-hello-style' );
 		wp_enqueue_script( 'osm-hello-script', OSM_DIR_URL . 'dist/script.js', [ 'react', 'react-dom' ], OSM_VERSION, true );
-		wp_set_script_translations( 'osm-hello-script', 'osm-block', OSM_DIR_PATH . 'languages' );
+		wp_set_script_translations( 'osm-hello-script', 'openStreetMap', OSM_DIR_PATH . 'languages' );
 
 		$className = $className ?? '';
 		$blockClassName = "wp-block-osm-hello $className align$align";
