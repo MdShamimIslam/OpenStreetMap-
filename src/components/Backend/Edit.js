@@ -10,7 +10,7 @@ import { withSelect } from '@wordpress/data';
 const Edit = props => {
 	const { attributes, setAttributes, clientId, device } = props;
 	const [mapView, setMapView] = useState('default');
-
+	
 	useEffect(() => { clientId && setAttributes({ cId: clientId.substring(0, 10) }); }, [clientId]);
 
 	return (
@@ -32,7 +32,7 @@ const Edit = props => {
 					]}>
 					{(tab) => (
 						<>
-							{tab.name === 'tab1' && <ContentSettings mapView={mapView} setMapView={setMapView} attributes={attributes} setAttributes={setAttributes} device={device}/>}
+							{tab.name === 'tab1' && <ContentSettings  mapView={mapView} setMapView={setMapView} attributes={attributes} setAttributes={setAttributes} device={device}/>}
 							{tab.name === 'tab2' && <StylesSettings attributes={attributes} setAttributes={setAttributes} device={device}  />}
 						</>
 					)}

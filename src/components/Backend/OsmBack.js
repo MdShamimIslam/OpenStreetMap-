@@ -72,7 +72,7 @@ const OsmBack = ({ attributes, mapView, setMapView }) => {
   const [listPlace, setListPlace] = useState([]);
   const locationSelection = [selectPosition?.lat, selectPosition?.lon];
   const { cId, osmInfo } = attributes;
-  const { scrollZoom,marker } = osmInfo;
+  const { marker,scrollZoom } = osmInfo;
   const { markUrl } = marker;
   const { text } = attributes.osmInfo.mapSearch.srcBtn.srcText;
  
@@ -108,6 +108,7 @@ const OsmBack = ({ attributes, mapView, setMapView }) => {
     setSearchText(event.target.value);
     handleSearch(event.target.value);
   }
+ 
 
   return (
     <>
@@ -139,7 +140,7 @@ const OsmBack = ({ attributes, mapView, setMapView }) => {
                   <Popup>
                    {searchText}
                   </Popup>
-                </Marker>
+                </Marker> 
               )
             }
             <ResetCenterView selectPosition={selectPosition} />

@@ -1,10 +1,6 @@
 
 $primaryColor: #4527a4;
 
-// .searchTxt input {
-//   padding: 10px;
-//   margin-right: 20px;
-// }
 .prefixNowEditing {
 	outline: 2px solid $primaryColor;
 }
@@ -20,7 +16,7 @@ $primaryColor: #4527a4;
 
 // TAB PANEL style
 .components-button.components-tab-panel__tabs-item {
-  font-size: 12px;
+  font-size: 15px;
   width: 100%;
   display: flex;
   justify-content: center;
@@ -28,4 +24,10 @@ $primaryColor: #4527a4;
 .components-button.components-tab-panel__tabs-item.active-tab {
   background-color: #4527a4;
   color: #ffffff;
+}
+.components-form-toggle.is-checked .components-form-toggle__track {
+  background-color: #635bbc;
+  border-color: #635bbc;
+  box-shadow: 0 0 0 var(--wp-admin-border-width-focus) #fff,
+    0 0 0 calc(var(--wp-admin-border-width-focus) * 2) #635bbc;
 }
