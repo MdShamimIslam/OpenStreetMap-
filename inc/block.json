@@ -11,98 +11,37 @@
       "type": "string",
       "default": ""
     },
-    "osmInfo":{
+    "map":{
       "type":"object",
       "default":{
-        "width": {
-            "desktop": "1275px",
-            "tablet": "",
-            "mobile": ""
-          },
-        "height": {
-            "desktop": "600px",
-            "tablet": "",
-            "mobile": ""
-          },
-        "border":{},
-        "padding": {
-          "desktop": {},
-          "tablet": {},
-          "mobile": {}
-        },
-        "scrollZoom":true,
         "marker":{
-          "markUrl":"https://png.pngtree.com/png-clipart/20230123/original/pngtree-flat-red-location-sign-png-image_8927579.png",
-          "srcText":""
-        },
-        "map":{
-            "mapType":"default",
-            "width": {
-              "desktop": "800px",
-              "tablet": "",
-              "mobile": ""
-           },
-            "height": {
-              "desktop": "600px",
-              "tablet": "",
-              "mobile": ""
-            },
-            "mapBorder":{}
-        },
-        "mapSearch":{
-          "selectField":"input",
-          "width": {
-              "desktop": "465px",
-              "tablet": "",
-              "mobile": ""
-           },
-          "input":{
-            "width": {
-              "desktop": "100%",
-              "tablet": "",
-              "mobile": ""
-           },
-            "height": {
-              "desktop": "100%",
-              "tablet": "",
-              "mobile": ""
-          },
-            "padding": {
-              "desktop": {"top":"5px","right":"5px","bottom":"5px","left":"5px"},
-              "tablet": {"top":"5px","right":"5px","bottom":"5px","left":"5px"},
-              "mobile": {"top":"5px","right":"5px","bottom":"5px","left":"5px"}
-          },
-          "radius":5
-          },
-          "srcBtn":{
-            "srcPadding": {
-                "desktop": {},
-                "tablet": {},
-                "mobile": {}
-            },
-            "srcColors":{
-              "color":"white",
-              "bg":"#4527a4"
-            },
-            "srcHoverColors":{
-              "color":"white",
-              "bg":"#167580"
-            },
-            "srcText":{
-              "text":"Search",
-              "typo":{}
-            },
-            "srcRadius":5
-            },
-            "location":{
-              "colors":{"color":"", "bg":""},
-              "hoverColor":"#055B5B",
-              "locRadius":5,
-              "locTypo":{}
-            }
+          "url":"https://png.pngtree.com/png-clipart/20230123/original/pngtree-flat-red-location-sign-png-image_8927579.png"
         }
       }
-    }
+    },
+    "options":{
+       "type":"object",
+       "default":{
+        "scrollZoom":true,
+        "layerType":"default"
+       }
+    },
+    "layout":{
+      "type":"object",
+      "default":{
+        "columns":{
+        "width": { "desktop": "620px","tablet": "","mobile": "" },
+        "height": { "desktop": "450px", "tablet": "","mobile": "" }
+        }
+      }
+    },
+     "style":{
+      "type":"object",
+      "default":{
+        "border":{},
+        "padding":{}
+      }
+     }
     
   },
   "supports": {

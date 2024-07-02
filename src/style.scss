@@ -1,12 +1,35 @@
-.searchTxt{
-  flex:1;
+// search control button and input field start
+.sBtn{
+	margin-top: 10px;
 }
-.searchBtn {
-  margin-left: 5px;
+.sBtn button{
+	background: #4527a4;
+	color: white;
+	border-radius: 0px 50px 50px 0px;
+  border:none;
+  cursor: pointer;
+	padding: 6px 9px;
+	margin-left: -5px;
+	height: 30px;
 }
-.searchBtn button{
-  padding: 10px 15px;
+.sBtn button:hover{
+	background: #034439;
+	color: white;
 }
+
+.inputField{
+	  margin-top: 10px;
+    margin-bottom: 23px;
+		
+}
+.inputField input{
+	  width: 192px;
+		height: 30px;
+		border-radius: 50px 0 0 50px;
+}
+// search control button input field end
+
+// content and style setting start
 .customWidth,.colorsPar{
 	display: flex;
 	justify-content: space-between;
@@ -18,7 +41,9 @@
 	font-weight: 500;
 	color: #4524a4;
 }
+// content and style setting end
 
+// content mediaUpload button start
 .mediaBtn{
 	background: #4527a4;
 	color: white;
@@ -26,15 +51,7 @@
 	margin-top: 16px;
 	margin-left:-5px
 }
-.searchConBtn{
-	background: #4527a4;
-	color: white;
-	border-radius:3px;
-  border:none;
-  cursor: pointer;
-	padding: 5px;
-	width: 100px;
-}
+// content mediaUpload button end
 
 // map type layer
 .mapViewSwitch {
@@ -72,16 +89,6 @@
   background-color: #4527a4;
 	color:white;
   
-}
-
-
-// padding, border, outline, box-shadow
-// :hover, :focus, :active
-
-.searchTxt input{
-	border: 1px solid #ccc;
-	outline: #4524a4;
-	box-shadow: 5px;
 }
 
 

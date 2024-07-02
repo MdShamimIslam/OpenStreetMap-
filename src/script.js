@@ -1,13 +1,16 @@
 import { createRoot } from 'react-dom/client';
-import {useState } from 'react';
 import './style.scss';
-import OsmFront from './FrontEnd/OsmFront';
-// Block Name
-function FrontEnd({ attributes, setAttributes }) {
-  const [mapView, setMapView] = useState('default');
+import OsmFront from './components/FrontEnd/OsmFront';
+
+
+function FrontEnd() {
+
+
+
   return (
     <>
-      <OsmFront mapView={mapView} setMapView={setMapView} attributes={attributes} setAttributes={setAttributes}></OsmFront>
+      <OsmFront
+      ></OsmFront>
     </>
   );
 }

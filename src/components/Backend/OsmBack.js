@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Style from '../Style/Style';
 import { MapContainer, Marker, Popup, TileLayer, useMap } from 'react-leaflet';
 import "leaflet/dist/leaflet.css";
 import L from 'leaflet';
 
-const NOM_URL = "https://nominatim.openstreetmap.org/search?";
 const position = [51.505, -0.09];
 
 function ResetCenterView(props) {
@@ -25,7 +24,7 @@ function ResetCenterView(props) {
 
   return null;
 }
-
+// map type view
 const MapViewSwitch = ({ defaultView, setMapView }) => {
   const map = useMap();
   const [activeView, setActiveView] = useState(defaultView); 
@@ -66,56 +65,36 @@ const MapViewSwitch = ({ defaultView, setMapView }) => {
   return null;
 };
 
-const OsmBack = ({ attributes, mapView, setMapView }) => {
-  const [selectPosition, setSelectPosition] = useState(null);
-  const [searchText, setSearchText] = useState('');
-  const [listPlace, setListPlace] = useState([]);
+
+
+const OsmBack = ({ attributes, mapView, setMapView, searchText,selectPosition, }) => {
   const locationSelection = [selectPosition?.lat, selectPosition?.lon];
-  const { cId, osmInfo } = attributes;
-  const { marker,scrollZoom } = osmInfo;
-  const { markUrl } = marker;
-  const { text } = attributes.osmInfo.mapSearch.srcBtn.srcText;
- 
+  const { cId, map,options} = attributes;
+  const { scrollZoom } = options;
+  const mapInstance = useRef(null)
   // marker info
   const icon = L.icon({
-    iconUrl: markUrl,
+    iconUrl: map.marker.url,
     iconSize: [38, 38]
   });
 
-  // Handle Search
-  const handleSearch = (query) => {
-    const params = {
-      q: query,
-      format: 'json',
-      addressDetails: 1,
-      polygon_geojson: 0
+  useEffect(() => {
+    if (mapInstance.current) {
+      if (scrollZoom) {
+        mapInstance.current.scrollWheelZoom.enable();
+      } else {
+        mapInstance.current.scrollWheelZoom.disable();
+      }
     }
-    const queryString = new URLSearchParams(params).toString();
-    const requestOptions = {
-      method: "GET",
-      redirect: "follow"
-    };
-    fetch(`${NOM_URL}${queryString}`, requestOptions)
-      .then(res => res.text())
-      .then(result => {
-        setListPlace(JSON.parse(result));
-      })
-      .catch(error => console.log("Error is :", error));
-  }
-
-  // Update handleSearch call on input change
-  const handleInputChange = (event) => {
-    setSearchText(event.target.value);
-    handleSearch(event.target.value);
-  }
+  }, [scrollZoom]);
+ 
  
 
   return (
     <>
       <Style attributes={attributes}></Style>
       <div  id={`osmHelloBlock-${cId}`}>
-        {/* map */}
-        <div className='maps'>
+        <div className='maps' >
           <MapContainer
             center={position}
             zoom={8}
@@ -136,51 +115,20 @@ const OsmBack = ({ attributes, mapView, setMapView }) => {
             )}
             {
               selectPosition && (
-                <Marker position={locationSelection} icon={icon}>
-                  <Popup>
-                   {searchText}
-                  </Popup>
-                </Marker> 
+                <div>
+                  <Marker position={locationSelection} icon={icon}>
+                    <Popup>
+                      {searchText}
+                    </Popup>
+                  </Marker>
+                </div>
+               
+                
               )
             }
             <ResetCenterView selectPosition={selectPosition} />
             <MapViewSwitch defaultView="default" setMapView={setMapView} />
-
           </MapContainer>
-        </div>
-        {/* Search */}
-        <div className='search'>
-          <div style={{ display: "flex", flexDirection: "column" }}>
-            <div style={{ display: "flex" }}>
-              {/* input field */}
-              <div className='searchTxt'>
-                <input
-                  value={searchText}
-                  onChange={handleInputChange}
-                  type="text" placeholder='Search Your Location...'
-                />
-              </div>
-              {/* button */}
-              <div className='searchBtn'>
-                <button onClick={() => handleSearch(searchText)}>{text}</button>
-              </div>
-            </div>
-            {/* show location */}
-            <div className='location'>
-              {
-                listPlace.map(item => (
-                  <div
-                    onClick={() => setSelectPosition(item)}
-                    key={item.place_id}
-                    style={{ display: "flex", alignItems: "center", gap: "5px", cursor: "pointer" }}
-                  >
-                    <img style={{ width: "25px" }} src="https://toppng.com//public/uploads/preview/location-vector-symbol-google-maps-marker-blue-115632628665jan8tcjlz.png" alt="placeholder" />
-                    <p className='placeDisName'>{item.display_name}</p>
-                  </div>
-                ))
-              }
-            </div>
-          </div>
         </div>
       </div>
     </>
