@@ -2,15 +2,11 @@ import { createRoot } from 'react-dom/client';
 import './style.scss';
 import OsmFront from './components/FrontEnd/OsmFront';
 
-
-function FrontEnd() {
-
-
+function FrontEnd({attributes}) {
 
   return (
     <>
-      <OsmFront
-      ></OsmFront>
+      <OsmFront attributes={attributes}></OsmFront>
     </>
   );
 }

@@ -32,7 +32,7 @@
       "type": "object",
       "default": {
         "mapColumns": {
-          "width": { "desktop": "620px", "tablet": "620px", "mobile": "295px" },
+          "width": { "desktop": "620px", "tablet": "620px", "mobile": "284px" },
           "height": { "desktop": "450px", "tablet": "450px", "mobile": "295px" }
         },
         "markerColumns": {

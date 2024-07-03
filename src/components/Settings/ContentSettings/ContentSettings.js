@@ -52,7 +52,7 @@ const ContentSettings = ({ attributes, setAttributes, searchText,handleSearch, h
                   className='listPlace'
                   
                 >
-                  <img style={{ width: "25px" }} src={marker.url} alt="placeholder" />
+                  <img style={{ width: "20px",height:"25px" }} src={marker.url} alt="placeholder" />
                   <p className='placeDisName'>{item.display_name}</p>
                 </div>
               ))
