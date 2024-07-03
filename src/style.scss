@@ -53,6 +53,25 @@
 }
 // content mediaUpload button end
 
+// ListPlace start
+.listPlace{
+display: flex;
+align-items: center;
+gap: 5px;
+cursor: pointer;
+}
+.listPlace:hover{
+background: #4527a4;
+color: white;
+padding: 5px;
+border-radius: 5px;
+}
+
+
+// ListPlace start
+
+// content mediaUpload button end
+
 // map type layer
 .mapViewSwitch {
   display: flex;

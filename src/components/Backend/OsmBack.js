@@ -74,11 +74,9 @@ const OsmBack = ({ attributes, setAttributes, device, searchText }) => {
   const { width, height } = layout.markerColumns;
   const locationSelection = [selectPosition?.lat, selectPosition?.lon];
   const [mapKey, setMapKey] = useState(0);
-  // const [position, setPosition] = useState([]);
  
-  // marker and position info
-  // const position = [51.505, -0.09];
-  const position = [23.8693275, 90.3926893];
+  // marker and position inf
+  const position = [parseFloat(selectPosition.lat) || 23.8693275, parseFloat(selectPosition.lon) || 90.3926893];
   const icon = L.icon({
     iconUrl: marker.url,
     iconSize: [width[device], height[device]]

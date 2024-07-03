@@ -16,7 +16,6 @@ const Edit = props => {
 
 	// Handle Search
 	const handleSearch = (query) => {
-		console.log('clicked handleSearch');
 		const params = {
 			q: query,
 			format: 'json',

@@ -4,52 +4,49 @@
   "title": "Open Street Map",
   "description": "Enhance your WordPress site with interactive OpenStreetMap (OSM) blocks.",
   "category": "widgets",
-  "keywords": ["OSM","osm", "Open Street Map", "open","Open","Map","map"],
+  "keywords": ["OSM", "osm", "Open Street Map", "open", "Open", "Map", "map"],
   "textdomain": "openStreetMap",
   "attributes": {
     "cId": {
       "type": "string",
       "default": ""
     },
-    "map":{
-      "type":"object",
-      "default":{
-        "marker":{
-          "url":"https://png.pngtree.com/png-clipart/20230123/original/pngtree-flat-red-location-sign-png-image_8927579.png"
+    "map": {
+      "type": "object",
+      "default": {
+        "marker": {
+          "url": "https://png.pngtree.com/png-clipart/20230123/original/pngtree-flat-red-location-sign-png-image_8927579.png"
         },
-        "listPlace":[],
-        "latitude":23.8693275,
-        "longitude":90.3926893,
-        "selectPosition":""
+        "listPlace": [],
+        "selectPosition": ""
       }
     },
-    "options":{
-       "type":"object",
-       "default":{
-        "scrollZoom":true,
-        "mapLayerType":"default"
-       }
+    "options": {
+      "type": "object",
+      "default": {
+        "scrollZoom": true,
+        "mapLayerType": "default"
+      }
     },
-    "layout":{
-      "type":"object",
-      "default":{
-        "mapColumns":{
-        "width": { "desktop": "620px","tablet": "620px","mobile": "295px" },
-        "height": { "desktop": "450px", "tablet": "450px","mobile": "295px" }
+    "layout": {
+      "type": "object",
+      "default": {
+        "mapColumns": {
+          "width": { "desktop": "620px", "tablet": "620px", "mobile": "295px" },
+          "height": { "desktop": "450px", "tablet": "450px", "mobile": "295px" }
         },
-        "markerColumns":{
-        "width": { "desktop": 38,"tablet":38,"mobile":38 },
-        "height": { "desktop": 38, "tablet":38,"mobile":38 }
+        "markerColumns": {
+          "width": { "desktop": 38, "tablet": 38, "mobile": 38 },
+          "height": { "desktop": 38, "tablet": 38, "mobile": 38 }
         }
       }
     },
-     "style":{
-      "type":"object",
-      "default":{
-        "border":{}
+    "style": {
+      "type": "object",
+      "default": {
+        "border": {}
       }
-     }
-    
+    }
   },
   "supports": {
     "align": ["wide", "full"],

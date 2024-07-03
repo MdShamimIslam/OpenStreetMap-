@@ -78,7 +78,7 @@ const StylesSettings = ({ attributes, setAttributes, device }) => {
           </div>
           <RangeControl
             allowReset
-            value={markerColumns.width[device]}
+            value={markerColumns.height[device]}
             onChange={(v) => setAttributes({ layout: updateData(layout, v, "markerColumns", "height", device) })}
             min={1}
             max={100}

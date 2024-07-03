@@ -49,9 +49,10 @@ const ContentSettings = ({ attributes, setAttributes, searchText,handleSearch, h
                     })})
                   }}
                   key={item.place_id}
-                  style={{ display: "flex", alignItems: "center", gap: "5px", cursor: "pointer" }}
+                  className='listPlace'
+                  
                 >
-                  <img style={{ width: "25px" }} src="https://toppng.com//public/uploads/preview/location-vector-symbol-google-maps-marker-blue-115632628665jan8tcjlz.png" alt="placeholder" />
+                  <img style={{ width: "25px" }} src={marker.url} alt="placeholder" />
                   <p className='placeDisName'>{item.display_name}</p>
                 </div>
               ))
