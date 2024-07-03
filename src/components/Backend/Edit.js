@@ -5,18 +5,18 @@ import { useEffect, useState } from 'react';
 import ContentSettings from '../Settings/ContentSettings/ContentSettings';
 import StylesSettings from '../Settings/StylesSettings/StylesSettings';
 import OsmBack from './OsmBack';
+import { produce } from "immer";
 
 const NOM_URL = "https://nominatim.openstreetmap.org/search?";
 
 const Edit = props => {
 	const { attributes, setAttributes, clientId, device } = props;
+	const { map } = attributes;
 	const [searchText, setSearchText] = useState('');
-	const [listPlace, setListPlace] = useState([]);
-	const [mapView, setMapView] = useState('default');
-	const [selectPosition, setSelectPosition] = useState(null);
 
 	// Handle Search
 	const handleSearch = (query) => {
+		console.log('clicked handleSearch');
 		const params = {
 			q: query,
 			format: 'json',
@@ -33,15 +33,38 @@ const Edit = props => {
 			.then(result => {
 				const arrayResult = JSON.parse(result);
 				const searchLocation = arrayResult[0];
-				setSelectPosition(searchLocation);
-				setListPlace(JSON.parse(result));
+				setAttributes({
+					map: produce(map, draft => {
+						draft.selectPosition = searchLocation;
+						draft.listPlace = [];
+				})})
 			})
 			.catch(error => console.log("Error is :", error));
 	}
 	// Update handleSearch call on input change
 	const handleInputChange = (event) => {
 		setSearchText(event.target.value);
-		handleSearch(event.target.value);
+		const params = {
+			q: event.target.value,
+			format: 'json',
+			addressDetails: 1,
+			polygon_geojson: 0
+		}
+		const queryString = new URLSearchParams(params).toString();
+		const requestOptions = {
+			method: "GET",
+			redirect: "follow"
+		};
+		fetch(`${NOM_URL}${queryString}`, requestOptions)
+			.then(res => res.text())
+			.then(result => {
+				setAttributes({
+					map: produce(map, draft => {
+						draft.listPlace = JSON.parse(result);
+					})
+				})
+			})
+			.catch(error => console.log("Error is :", error));
 		
 	}
 
@@ -70,10 +93,7 @@ const Edit = props => {
 						<>
 							{tab.name === 'tab1' && <ContentSettings
 								attributes={attributes} setAttributes={setAttributes}
-								mapView={mapView} setMapView={setMapView}
 								searchText={searchText} setSearchText={setSearchText}
-								listPlace={listPlace} setListPlace={setListPlace}
-								selectPosition={selectPosition} setSelectPosition={setSelectPosition}
 								handleSearch={handleSearch}
 								handleInputChange={handleInputChange}
 								device={device} />}
@@ -84,10 +104,7 @@ const Edit = props => {
 			</InspectorControls>
 			<OsmBack
 				attributes={attributes} setAttributes={setAttributes}
-				mapView={mapView} setMapView={setMapView}
 				searchText={searchText} setSearchText={setSearchText}
-				listPlace={listPlace} setListPlace={setListPlace}
-				selectPosition={selectPosition} setSelectPosition={setSelectPosition}
 				handleSearch={handleSearch}
 				handleInputChange={handleInputChange}
 				device={device} />

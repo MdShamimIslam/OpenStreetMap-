@@ -5,12 +5,14 @@ import { __ } from '@wordpress/i18n';
 import { updateData } from '../../../utils/functions';
 import { MediaUpload } from "@wordpress/block-editor";
 import { mapTypeOptions } from '../../../utils/options';
+import { produce } from 'immer';
 
 
-const ContentSettings = ({ attributes, setAttributes, mapView, setMapView, searchText, listPlace, setSelectPosition,handleSearch, handleInputChange }) => {
+const ContentSettings = ({ attributes, setAttributes, searchText,handleSearch, handleInputChange }) => {
   const { map, options } = attributes;
-  const { marker } = map;
-  const { scrollZoom } = options;
+  const { marker, listPlace } = map;
+  const { scrollZoom, mapLayerType } = options;
+
 
   return (
     <>
@@ -37,9 +39,15 @@ const ContentSettings = ({ attributes, setAttributes, mapView, setMapView, searc
           {/* show location */}
           <div className='location'>
             {
-              listPlace.map(item => (
+              listPlace.length > 0 && listPlace.map(item => (
                 <div
-                  onClick={() => setSelectPosition(item)}
+                  onClick={() => {
+                    setAttributes({
+                      map: produce(map, draft => {
+                        draft.selectPosition = item;
+                        draft.listPlace = [];
+                    })})
+                  }}
                   key={item.place_id}
                   style={{ display: "flex", alignItems: "center", gap: "5px", cursor: "pointer" }}
                 >
@@ -54,9 +62,9 @@ const ContentSettings = ({ attributes, setAttributes, mapView, setMapView, searc
         <div>
           <p className='widthChild' style={{ marginBottom: "8px" }}>Type</p>
           <SelectControl
-            value={mapView}
+            value={mapLayerType}
             options={mapTypeOptions}
-            onChange={(v) => setMapView(v)}
+            onChange={(v) => setAttributes({ options: updateData(options, v,"mapLayerType")})}
           />
         </div>
         {/* Upload marker */}

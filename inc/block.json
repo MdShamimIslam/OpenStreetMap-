@@ -16,30 +16,37 @@
       "default":{
         "marker":{
           "url":"https://png.pngtree.com/png-clipart/20230123/original/pngtree-flat-red-location-sign-png-image_8927579.png"
-        }
+        },
+        "listPlace":[],
+        "latitude":23.8693275,
+        "longitude":90.3926893,
+        "selectPosition":""
       }
     },
     "options":{
        "type":"object",
        "default":{
         "scrollZoom":true,
-        "layerType":"default"
+        "mapLayerType":"default"
        }
     },
     "layout":{
       "type":"object",
       "default":{
-        "columns":{
-        "width": { "desktop": "620px","tablet": "","mobile": "" },
-        "height": { "desktop": "450px", "tablet": "","mobile": "" }
+        "mapColumns":{
+        "width": { "desktop": "620px","tablet": "620px","mobile": "295px" },
+        "height": { "desktop": "450px", "tablet": "450px","mobile": "295px" }
+        },
+        "markerColumns":{
+        "width": { "desktop": 38,"tablet":38,"mobile":38 },
+        "height": { "desktop": 38, "tablet":38,"mobile":38 }
         }
       }
     },
      "style":{
       "type":"object",
       "default":{
-        "border":{},
-        "padding":{}
+        "border":{}
       }
      }
     
