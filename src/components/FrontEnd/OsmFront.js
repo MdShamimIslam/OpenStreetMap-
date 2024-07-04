@@ -3,6 +3,7 @@ import Style from "../Style/Style";
 import { MapContainer, Marker, Popup, TileLayer, useMap } from 'react-leaflet';
 import "leaflet/dist/leaflet.css";
 import L from 'leaflet';
+import useDeviceWidth from "../hooks/useDeviceWidth";
 
 // resetCenterView
 function ResetCenterView(props) {
@@ -62,19 +63,19 @@ const MapViewSwitch = ({options,layer,setLayer }) => {
 
 const OsmFront = ({attributes}) => {
     const { cId, map, options, layout } = attributes;
-    const { marker,selectPosition } = map;
+    const { marker,selectPosition,searchQuery } = map;
     const { scrollZoom,mapLayerType} = options;
     const { width, height } = layout.markerColumns;
     const locationSelection = [selectPosition?.lat, selectPosition?.lon];
     const [mapKey, setMapKey] = useState(0);
     const [layer,setLayer] = useState(mapLayerType);
+    const {device} = useDeviceWidth();
 
     // marker and position inf
     const position = [parseFloat(selectPosition.lat) || 23.8693275, parseFloat(selectPosition.lon) || 90.3926893];
     const icon = L.icon({
         iconUrl: marker.url,
-        // iconSize: [width[device], height[device]]
-        iconSize: [width.desktop, height.desktop]
+        iconSize: [width[device], height[device]]
     });
 
     useEffect(() => {
@@ -107,7 +108,7 @@ const OsmFront = ({attributes}) => {
             {selectPosition && (
               <div>
                 <Marker position={locationSelection} icon={icon}>
-                  <Popup>{'Loc'}</Popup>
+                  <Popup>{searchQuery}</Popup>
                 </Marker>
               </div>
             )}

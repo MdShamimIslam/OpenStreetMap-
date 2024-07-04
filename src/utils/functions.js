@@ -18,6 +18,7 @@ export const updateData = (attr, value, ...props) => {
   });
 };
 
+
 // padding and margin etc
 export const getBoxCss = (value, property) => {
   if (value) {

@@ -67,7 +67,7 @@ const MapViewSwitch = ({ mapLayerType, setAttributes, options }) => {
   return null;
 };
 
-const OsmBack = ({ attributes, setAttributes, device, searchText }) => {
+const OsmBack = ({ attributes, setAttributes, device,searchText}) => {
   const { cId, map, options, layout } = attributes;
   const { marker,selectPosition } = map;
   const { scrollZoom, mapLayerType} = options;
@@ -75,7 +75,7 @@ const OsmBack = ({ attributes, setAttributes, device, searchText }) => {
   const locationSelection = [selectPosition?.lat, selectPosition?.lon];
   const [mapKey, setMapKey] = useState(0);
  
-  // marker and position inf
+  // marker and position info
   const position = [parseFloat(selectPosition.lat) || 23.8693275, parseFloat(selectPosition.lon) || 90.3926893];
   const icon = L.icon({
     iconUrl: marker.url,
@@ -89,6 +89,7 @@ const OsmBack = ({ attributes, setAttributes, device, searchText }) => {
   return (
     <>
       <Style attributes={attributes}></Style>
+
       <div  id={`osmHelloBlock-${cId}`}>
         <div className='maps' >
           <MapContainer

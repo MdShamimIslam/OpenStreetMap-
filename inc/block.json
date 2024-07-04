@@ -18,7 +18,10 @@
           "url": "https://png.pngtree.com/png-clipart/20230123/original/pngtree-flat-red-location-sign-png-image_8927579.png"
         },
         "listPlace": [],
-        "selectPosition": ""
+        "selectPosition": "",
+        "searchQuery": "",
+        "latitude": "",
+        "longitude": ""
       }
     },
     "options": {
@@ -32,12 +35,12 @@
       "type": "object",
       "default": {
         "mapColumns": {
-          "width": { "desktop": "620px", "tablet": "620px", "mobile": "284px" },
+          "width": { "desktop": "620px", "tablet": "620px", "mobile": "300px" },
           "height": { "desktop": "450px", "tablet": "450px", "mobile": "295px" }
         },
         "markerColumns": {
-          "width": { "desktop": 38, "tablet": 38, "mobile": 38 },
-          "height": { "desktop": 38, "tablet": 38, "mobile": 38 }
+          "width": { "desktop": 40, "tablet": 35, "mobile": 30 },
+          "height": { "desktop": 40, "tablet": 35, "mobile": 30 }
         }
       }
     },

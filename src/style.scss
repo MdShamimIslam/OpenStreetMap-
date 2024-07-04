@@ -6,14 +6,14 @@
 	background: #4527a4;
 	color: white;
 	border-radius: 0px 50px 50px 0px;
-  border:none;
-  cursor: pointer;
+	border:none;
+	cursor: pointer;
 	padding: 6px 9px;
 	margin-left: -5px;
 	height: 30px;
 }
 .sBtn button:hover{
-	background: #034439;
+	background: #1c858c;
 	color: white;
 }
 
@@ -26,6 +26,10 @@
 	  width: 192px;
 		height: 30px;
 		border-radius: 50px 0 0 50px;
+}
+.inputField input:focus{
+	outline: none;
+	box-shadow: none;
 }
 // search control button input field end
 
@@ -71,6 +75,31 @@ border-radius: 5px;
 // ListPlace start
 
 // content mediaUpload button end
+
+// latitude and longitude satrt content setting
+.latLanPar{
+	display: flex;
+	align-items: center;
+	gap: 5px;
+}
+.nmbr{
+margin-top: -12px;
+}
+.latAndLonBtn button{
+	background: #4527a4;
+	color: white;
+	border-radius: 3px;
+	border:none;
+	cursor: pointer;
+	padding: 7px 0px;
+	width: 250px;
+}
+.latAndLonBtn button:hover{
+	background: #1c858c;
+	color: white;
+}
+
+// latitude and longitude end content setting
 
 // map type layer
 .mapViewSwitch {
