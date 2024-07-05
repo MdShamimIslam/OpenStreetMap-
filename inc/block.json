@@ -2,9 +2,9 @@
   "apiVersion": "1",
   "name": "osm/open-street-map",
   "title": "Open Street Map",
-  "description": "Enhance your WordPress site with interactive OpenStreetMap (OSM) blocks.",
+  "description": "Enhance your WordPress site with interactive open-street-map (OSM) blocks.",
   "category": "widgets",
-  "keywords": ["OSM", "osm", "Open Street Map", "open", "Open", "Map", "map"],
+  "keywords": ["OSM", "osm", "Open Street Map", "open", "Open", "Map", "map","open street map"],
   "textdomain": "open-street-map",
   "attributes": {
     "cId": {

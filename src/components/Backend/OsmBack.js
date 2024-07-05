@@ -1,14 +1,14 @@
 import { produce } from "immer";
 import L from "leaflet";
+import 'leaflet-fullscreen';
+import 'leaflet-fullscreen/dist/leaflet.fullscreen.css';
 import "leaflet-routing-machine";
 import "leaflet-routing-machine/dist/leaflet-routing-machine.css";
 import "leaflet.locatecontrol";
 import "leaflet.locatecontrol/dist/L.Control.Locate.min.css";
 import "leaflet/dist/leaflet.css";
-import 'leaflet-fullscreen';
-import 'leaflet-fullscreen/dist/leaflet.fullscreen.css';
 import React, { useEffect, useRef, useState } from "react";
-import { MapContainer,TileLayer, useMap } from "react-leaflet";
+import { MapContainer, TileLayer, useMap } from "react-leaflet";
 import Style from "../Style/Style";
 
 // set location direction
@@ -172,7 +172,7 @@ const OsmBack = ({attributes, setAttributes,device}) => {
     if (!routeDirection.fromLocation.lat || !routeDirection.fromLocation.lon) {
       navigator.geolocation.getCurrentPosition((position) => {
         fetch(
-          `https://nominatim.openstreetmap.org/reverse?format=json&lat=${position.coords.latitude}&lon=${position.coords.longitude}`
+          `https://nominatim.open-street-map.org/reverse?format=json&lat=${position.coords.latitude}&lon=${position.coords.longitude}`
         )
           .then((res) => res.json())
           .then((data) => {

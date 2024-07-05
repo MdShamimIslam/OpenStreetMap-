@@ -21,5 +21,5 @@ export const bundle = () =>
       '!todo.txt',
       '!webpack.config.js',
     ])
-		.pipe(zip('openStreetMap.zip'))
+		.pipe(zip('open-street-map.zip'))
 		.pipe(gulp.dest('bundled'))

@@ -1,5 +1,5 @@
 {
-  "name": "openStreetMap",
+  "name": "open-street-map",
   "version": "1.0.0",
   "description": "Discription of OSM Block",
   "main": "index.js",

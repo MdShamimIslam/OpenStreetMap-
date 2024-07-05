@@ -1,17 +1,17 @@
+import { MediaUpload } from "@wordpress/block-editor";
 import {
   Button,
+  __experimentalNumberControl as NumberControl,
   PanelBody,
+  RangeControl,
   SelectControl,
   TextControl,
   ToggleControl,
-  __experimentalNumberControl as NumberControl,
 } from "@wordpress/components";
 import { __ } from "@wordpress/i18n";
-import { updateData } from "../../../utils/functions";
-import { MediaUpload } from "@wordpress/block-editor";
-import { mapTypeOptions, searchIcon } from "../../../utils/options";
 import { produce } from "immer";
-import { RangeControl } from "@wordpress/components";
+import { updateData } from "../../../utils/functions";
+import { mapTypeOptions, searchIcon } from "../../../utils/options";
 
 const ContentSettings = ({
   attributes,
@@ -108,7 +108,7 @@ const ContentSettings = ({
               <p>Latitude</p>
               <NumberControl
                 className="nmbr"
-                placeholder={__("Type Latitude...", "openStreetMap")}
+                placeholder={__("Type Latitude...", "open-street-map")}
                 label=""
                 value={latitude}
                 onChange={(v) =>
@@ -122,7 +122,7 @@ const ContentSettings = ({
               <p>Longitude</p>
               <NumberControl
                 className="nmbr"
-                placeholder={__("Type Longitude...", "openStreetMap")}
+                placeholder={__("Type Longitude...", "open-street-map")}
                 label=""
                 value={longitude}
                 onChange={(v) => {
@@ -205,7 +205,7 @@ const ContentSettings = ({
               <p className="widthChild">Start Point Location</p>
               <TextControl
                 style={{ width: "215px", marginTop: "10px" }}
-                placeholder={__(" Upload self Marker...", "openStreetMap")}
+                placeholder={__(" Upload self Marker...", "open-street-map")}
                 label=""
                 value={url}
                 onChange={(v) =>
@@ -250,7 +250,7 @@ const ContentSettings = ({
               <p className="widthChild">End Point Location</p>
               <TextControl
                 style={{ width: "215px", marginTop: "10px" }}
-                placeholder={__(" Upload others Marker...", "openStreetMap")}
+                placeholder={__(" Upload others Marker...", "open-street-map")}
                 label=""
                 value={toUrl}
                 onChange={(v) =>
@@ -297,7 +297,7 @@ const ContentSettings = ({
               <p className="widthChild">Intermediate Point Location</p>
               <TextControl
                 style={{ width: "215px", marginTop: "10px" }}
-                placeholder={__("Upload Path Marker...", "openStreetMap")}
+                placeholder={__("Upload Path Marker...", "open-street-map")}
                 label=""
                 value={pathUrl}
                 onChange={(v) =>
