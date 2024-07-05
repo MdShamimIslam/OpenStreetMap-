@@ -16,8 +16,7 @@ class OSMHelloBlock{
 	}
 
 	function render( $attributes ){
-		  
-		// $align = isset($attributes['align']) ? $attributes['align'] : 'center'; 
+		
 		extract( $attributes );
 
 		wp_enqueue_style( 'osm-hello-style' );

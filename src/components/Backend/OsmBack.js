@@ -172,7 +172,7 @@ const OsmBack = ({attributes, setAttributes,device}) => {
     if (!routeDirection.fromLocation.lat || !routeDirection.fromLocation.lon) {
       navigator.geolocation.getCurrentPosition((position) => {
         fetch(
-          `https://nominatim.open-street-map.org/reverse?format=json&lat=${position.coords.latitude}&lon=${position.coords.longitude}`
+          `https://nominatim.openStreetMap.org/reverse?format=json&lat=${position.coords.latitude}&lon=${position.coords.longitude}`
         )
           .then((res) => res.json())
           .then((data) => {
@@ -190,6 +190,7 @@ const OsmBack = ({attributes, setAttributes,device}) => {
       });
     }
   }, [routeDirection]);
+ 
 
  // self location by map button
   const GeolocationControl = () => {

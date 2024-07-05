@@ -7,7 +7,7 @@ import ContentSettings from "../Settings/ContentSettings/ContentSettings";
 import StylesSettings from "../Settings/StylesSettings/StylesSettings";
 import OsmBack from "./OsmBack";
 
-const NOM_URL = "https://nominatim.open-street-map.org/search?";
+const NOM_URL = "https://nominatim.openStreetMap.org/search?";
 
 const Edit = (props) => {
   const { attributes, setAttributes, clientId, device } = props;
