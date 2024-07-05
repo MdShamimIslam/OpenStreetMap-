@@ -12,23 +12,26 @@ class OSMHelloBlock{
 			'render_callback'	=> [$this, 'render']
 		] ); // Register Block
 
-		wp_set_script_translations( 'osm-hello-editor-script', 'openStreetMap', OSM_DIR_PATH . 'languages' );
+		wp_set_script_translations( 'osm-hello-editor-script', 'open-street-map', OSM_DIR_PATH . 'languages' );
 	}
 
 	function render( $attributes ){
+		  
+		// $align = isset($attributes['align']) ? $attributes['align'] : 'center'; 
 		extract( $attributes );
 
 		wp_enqueue_style( 'osm-hello-style' );
 		wp_enqueue_script( 'osm-hello-script', OSM_DIR_URL . 'dist/script.js', [ 'react', 'react-dom' ], OSM_VERSION, true );
-		wp_set_script_translations( 'osm-hello-script', 'openStreetMap', OSM_DIR_PATH . 'languages' );
+		wp_set_script_translations( 'osm-hello-script', 'open-street-map', OSM_DIR_PATH . 'languages' );
 
 		$className = $className ?? '';
 		$blockClassName = "wp-block-osm-hello $className align$align";
 
 		ob_start(); ?>
-		<div class='<?php echo esc_attr( $blockClassName ); ?>' id='osmHelloBlock-<?php echo esc_attr( $cId ) ?>' data-attributes='<?php echo esc_attr( wp_json_encode( $attributes ) ); ?>'></div>
+<div class='<?php echo esc_attr( $blockClassName ); ?>' id='osmHelloBlock-<?php echo esc_attr( $cId ) ?>'
+    data-attributes='<?php echo esc_attr( wp_json_encode( $attributes ) ); ?>'></div>
 
-		<?php return ob_get_clean();
+<?php return ob_get_clean();
 	}
 }
 new OSMHelloBlock();

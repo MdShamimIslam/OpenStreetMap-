@@ -108,7 +108,7 @@ const ContentSettings = ({
               <p>Latitude</p>
               <NumberControl
                 className="nmbr"
-                placeholder={__("Type Latitude...", "open-street-map")}
+                placeholder={__("Type Latitude...", "openStreetMap")}
                 label=""
                 value={latitude}
                 onChange={(v) =>
@@ -122,7 +122,7 @@ const ContentSettings = ({
               <p>Longitude</p>
               <NumberControl
                 className="nmbr"
-                placeholder={__("Type Longitude...", "open-street-map")}
+                placeholder={__("Type Longitude...", "openStreetMap")}
                 label=""
                 value={longitude}
                 onChange={(v) => {
@@ -205,7 +205,7 @@ const ContentSettings = ({
               <p className="widthChild">Start Point Location</p>
               <TextControl
                 style={{ width: "215px", marginTop: "10px" }}
-                placeholder={__(" Upload self Marker...", "open-street-map")}
+                placeholder={__(" Upload self Marker...", "openStreetMap")}
                 label=""
                 value={url}
                 onChange={(v) =>
@@ -250,7 +250,7 @@ const ContentSettings = ({
               <p className="widthChild">End Point Location</p>
               <TextControl
                 style={{ width: "215px", marginTop: "10px" }}
-                placeholder={__(" Upload others Marker...", "open-street-map")}
+                placeholder={__(" Upload others Marker...", "openStreetMap")}
                 label=""
                 value={toUrl}
                 onChange={(v) =>
@@ -297,7 +297,7 @@ const ContentSettings = ({
               <p className="widthChild">Intermediate Point Location</p>
               <TextControl
                 style={{ width: "215px", marginTop: "10px" }}
-                placeholder={__("Upload Path Marker...", "open-street-map")}
+                placeholder={__("Upload Path Marker...", "openStreetMap")}
                 label=""
                 value={pathUrl}
                 onChange={(v) =>
