@@ -1,37 +1,38 @@
 // search control button and input field start
+
 .sBtn{
-	margin-top: 10px;
-}
-.sBtn button{
 	background: #4527a4;
 	color: white;
 	border-radius: 0px 50px 50px 0px;
 	border:none;
 	cursor: pointer;
-	padding: 6px 9px;
+	padding: 5px 8px;
 	margin-left: -5px;
 	height: 30px;
+	margin-top: 10px;
 }
-.sBtn button:hover{
+.sBtn:hover{
 	background: #1c858c;
 	color: white;
 }
 
 .inputField{
 	  margin-top: 10px;
-    margin-bottom: 23px;
+      margin-bottom: 23px;
 		
 }
 .inputField input{
-	  width: 192px;
-		height: 30px;
-		border-radius: 50px 0 0 50px;
+	width: 215px;
+	height: 30px;
+	border-radius: 50px 0 0 50px;
 }
 .inputField input:focus{
 	outline: none;
 	box-shadow: none;
 }
 // search control button input field end
+
+
 
 // content and style setting start
 .customWidth,.colorsPar{
@@ -47,6 +48,8 @@
 }
 // content and style setting end
 
+
+
 // content mediaUpload button start
 .mediaBtn{
 	background: #4527a4;
@@ -56,6 +59,8 @@
 	margin-left:-5px
 }
 // content mediaUpload button end
+
+
 
 // ListPlace start
 .listPlace{
@@ -70,13 +75,37 @@ color: white;
 padding: 5px;
 border-radius: 5px;
 }
+// ListPlace end
 
 
-// ListPlace start
+// osmBack from and to  button start
+.input-container {
+	display: flex;
+	gap: 5px;
+	margin-bottom: 10px;
+  }
+  
+  .input-container input,
+  .input-container select {
+	flex: 1;
+	padding: 5px;
+  }
+  
+  .input-container button {
+	padding: 5px 10px;
+  }
+  
+  .travel-info {
+	margin-top: 10px;
+  }
 
-// content mediaUpload button end
+// osmBack from and to  button end
 
-// latitude and longitude satrt content setting
+
+
+
+
+// latitude and longitude start content setting
 .latLanPar{
 	display: flex;
 	align-items: center;
@@ -101,9 +130,11 @@ margin-top: -12px;
 
 // latitude and longitude end content setting
 
-// map type layer
+
+// map type layer start
 .mapViewSwitch {
   display: flex;
+  flex-direction: column;
   align-items: center;
   background: white;
   border: 2px solid rgba(0, 0, 0, 0.2);
@@ -114,6 +145,7 @@ margin-top: -12px;
 	display:flex;
 	align-items: center;
 	gap: 5px;
+	
 }
 
 .mapViewSwitch .mapViewBtn {
@@ -129,20 +161,31 @@ margin-top: -12px;
 .mapViewSwitch .mapViewBtn img {
   width: 18px;
   height: 15px;
+  padding: 0 1px;
 }
 
-.mapViewSwitch .vertical-divider {
-  width: 1px;
-  height: 20px;
-  background: #ccc;
-  margin: 0 10px;
-}
+// .mapViewSwitch .vertical-divider {
+//   width: 1px;
+//   height: 20px;
+//   background: #ccc;
+//   margin: 0 10px;
+// }
 
 .mapViewSwitch .mapViewBtn.active {
   background-color: #4527a4;
-	color:white;
+  color:white;
   
 }
+// map type layer start
+
+
+
+
+
+
+
+
+
 
 
 $primaryColor: #4527a4;

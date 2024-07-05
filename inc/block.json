@@ -15,7 +15,9 @@
       "type": "object",
       "default": {
         "marker": {
-          "url": "https://png.pngtree.com/png-clipart/20230123/original/pngtree-flat-red-location-sign-png-image_8927579.png"
+          "url": "https://png.pngtree.com/png-clipart/20230123/original/pngtree-flat-red-location-sign-png-image_8927579.png",
+          "toUrl": "https://png.pngtree.com/png-clipart/20230123/original/pngtree-flat-red-location-sign-png-image_8927579.png",
+          "pathUrl": "https://i.pinimg.com/474x/94/df/b6/94dfb68e3b5ef24ec89c23044247ea91.jpg"
         },
         "listPlace": [],
         "selectPosition": "",
@@ -28,7 +30,12 @@
       "type": "object",
       "default": {
         "scrollZoom": true,
-        "mapLayerType": "default"
+        "isMapLayer": true,
+        "isFullScreen": false,
+        "isViewOtherAddress": false,
+        "isViewMyLocation": false,
+        "mapLayerType": "default",
+        "selectMarker": "start"
       }
     },
     "layout": {
@@ -38,7 +45,15 @@
           "width": { "desktop": "620px", "tablet": "620px", "mobile": "300px" },
           "height": { "desktop": "450px", "tablet": "450px", "mobile": "295px" }
         },
-        "markerColumns": {
+        "selfMarkerColumns": {
+          "width": { "desktop": 40, "tablet": 35, "mobile": 30 },
+          "height": { "desktop": 40, "tablet": 35, "mobile": 30 }
+        },
+        "othersMarkerColumns": {
+          "width": { "desktop": 40, "tablet": 35, "mobile": 30 },
+          "height": { "desktop": 40, "tablet": 35, "mobile": 30 }
+        },
+        "pathMarkerColumns": {
           "width": { "desktop": 40, "tablet": 35, "mobile": 30 },
           "height": { "desktop": 40, "tablet": 35, "mobile": 30 }
         }
@@ -47,7 +62,30 @@
     "style": {
       "type": "object",
       "default": {
-        "border": {}
+        "tooltipColors":{"color":"white","bg":"#4527a4"},
+        "tooltipTypo": {},
+        "border": {},
+        "padding":{
+          "desktop":{},
+          "tablet":{},
+          "mobile":{}
+        },
+        "zoom":15
+      }
+    },
+    "routeDirection": {
+      "type": "object",
+      "default": {
+        "fromLocation": {
+          "lat": 0,
+          "lon": 0,
+          "locationName": ""
+        },
+        "toLocation": {
+          "lat": 0,
+          "lon": 0,
+          "locationName": ""
+        }
       }
     }
   },

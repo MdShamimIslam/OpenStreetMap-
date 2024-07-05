@@ -28,6 +28,6 @@ $primaryColor: #4527a4;
 .components-form-toggle.is-checked .components-form-toggle__track {
   background-color: #635bbc;
   border-color: #635bbc;
-  box-shadow: 0 0 0 var(--wp-admin-border-width-focus) #fff,
-    0 0 0 calc(var(--wp-admin-border-width-focus) * 2) #635bbc;
+  // box-shadow: 0 0 0 var(--wp-admin-border-width-focus) #fff,
+  //   0 0 0 calc(var(--wp-admin-border-width-focus) * 2) #635bbc;
 }
