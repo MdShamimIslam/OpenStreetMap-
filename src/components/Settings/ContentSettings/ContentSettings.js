@@ -151,7 +151,7 @@ const ContentSettings = ({
           />
         </div>
         {/* zoom */}
-        <div>
+        <div className="bPlPanelBody">
         <p className="widthChild">Zoom</p>
           <RangeControl
             value={style.zoom}

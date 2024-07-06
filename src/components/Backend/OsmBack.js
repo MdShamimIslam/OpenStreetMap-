@@ -1,7 +1,7 @@
 import { produce } from "immer";
 import L from "leaflet";
-import 'leaflet-fullscreen';
-import 'leaflet-fullscreen/dist/leaflet.fullscreen.css';
+import "leaflet-fullscreen";
+import "leaflet-fullscreen/dist/leaflet.fullscreen.css";
 import "leaflet-routing-machine";
 import "leaflet-routing-machine/dist/leaflet-routing-machine.css";
 import "leaflet.locatecontrol";
@@ -13,24 +13,31 @@ import Style from "../Style/Style";
 
 // set location direction
 function ResetCenterView(props) {
-  const { selectPosition, routeDirection,selfMarkerColumns,othersMarkerColumns,pathMarkerColumns,marker,device } = props;
-  const { fromLocation } = routeDirection;
+  const {
+    selectPosition,
+    routeDirection,
+    selfMarkerColumns,
+    othersMarkerColumns,
+    pathMarkerColumns,
+    marker,
+    device,
+  } = props;
+  const { myLocation } = routeDirection;
   const routeControlRef = useRef(null);
   const map = useMap();
-
+  // from and to location set
   const waypoints = [
-        {
-          latLng: L.latLng(fromLocation.lat, fromLocation.lon),
-          name: fromLocation.locationName
-        },
-        {
-          latLng: L.latLng(selectPosition.lat, selectPosition.lon),
-          name: selectPosition.display_name
-        }
-      ];
-
+    {
+      latLng: L.latLng(myLocation.lat, myLocation.lon),
+      name: myLocation.locationName,
+    },
+    {
+      latLng: L.latLng(selectPosition.lat, selectPosition.lon),
+      name: selectPosition.display_name,
+    },
+  ];
+  // show map
   useEffect(() => {
-
     if (selectPosition) {
       map.setView(
         L.latLng(selectPosition?.lat, selectPosition?.lon),
@@ -40,21 +47,20 @@ function ResetCenterView(props) {
         }
       );
     }
-    // self location
+    // show lat and lon when click in the map
     map.on("click", (e) => {
       L.popup()
         .setLatLng(e.latlng)
         .setContent("You clicked the map at " + e.latlng.toString())
         .openOn(map);
     });
-    
-    // Set Routing Control
-  if(routeControlRef.current) {
-    map.removeControl(routeControlRef.current);
-    routeControlRef.current = null;
-  }
+    // Set Routing Control start
+    if (routeControlRef.current) {
+      map.removeControl(routeControlRef.current);
+      routeControlRef.current = null;
+    }
 
-   routeControlRef.current = L.Routing.control({
+    routeControlRef.current = L.Routing.control({
       waypoints,
       createMarker: (i, waypoint, n) => {
         let markerOptions = {};
@@ -62,42 +68,60 @@ function ResetCenterView(props) {
           // Custom icon for the start point
           markerOptions.icon = L.icon({
             iconUrl: marker.url,
-            iconSize: [selfMarkerColumns.width[device], selfMarkerColumns.height[device]],
+            iconSize: [
+              selfMarkerColumns.width[device],
+              selfMarkerColumns.height[device],
+            ],
             iconAnchor: [12, 41],
             popupAnchor: [1, -34],
-            shadowSize: [41, 41]
+            shadowSize: [41, 41],
           });
         } else if (i === n - 1) {
           // Custom icon for the end point
           markerOptions.icon = L.icon({
             iconUrl: marker.toUrl,
-            iconSize: [othersMarkerColumns.width[device], othersMarkerColumns.height[device]],
+            iconSize: [
+              othersMarkerColumns.width[device],
+              othersMarkerColumns.height[device],
+            ],
             iconAnchor: [12, 41],
             popupAnchor: [1, -34],
-            shadowSize: [41, 41]
+            shadowSize: [41, 41],
           });
         } else {
           // Custom icon for the intermediate points
           markerOptions.icon = L.icon({
             iconUrl: marker.pathUrl,
-            iconSize: [pathMarkerColumns.width[device], pathMarkerColumns.height[device]],
+            iconSize: [
+              pathMarkerColumns.width[device],
+              pathMarkerColumns.height[device],
+            ],
             iconAnchor: [12, 41],
             popupAnchor: [1, -34],
-            shadowSize: [41, 41]
+            shadowSize: [41, 41],
           });
         }
         return L.marker(waypoint.latLng, markerOptions);
-      }
+      },
     }).addTo(map);
 
     return () => {
-      if(routeControlRef.current) {
+      if (routeControlRef.current) {
         map.removeControl(routeControlRef.current);
         routeControlRef.current = null;
       }
-   };
-
-  }, [selectPosition, routeDirection,marker,selfMarkerColumns,othersMarkerColumns,pathMarkerColumns,device]);
+    };
+    // Set Routing Control end
+  }, [
+    selectPosition,
+    routeDirection,
+    marker,
+    selfMarkerColumns,
+    othersMarkerColumns,
+    pathMarkerColumns,
+    device,
+    map,
+  ]);
 
   return null;
 }
@@ -148,28 +172,42 @@ const MapViewSwitch = ({ mapLayerType, setAttributes, options }) => {
   return null;
 };
 
-const OsmBack = ({attributes, setAttributes,device}) => {
-  const { cId, map, options,routeDirection,layout,style } = attributes;
-  const { selectPosition,marker} = map;
-  const { isMapLayer,scrollZoom, mapLayerType, isFullScreen,isViewMyLocation,isViewOtherAddress } = options;
-  const { selfMarkerColumns,othersMarkerColumns,pathMarkerColumns} = layout;
+const OsmBack = ({ attributes, setAttributes, device }) => {
+  const { cId, map, options, layout, style } = attributes;
+  const { selectPosition, marker, latitude, longitude,routeDirection } = map;
+  const {
+    isMapLayer,
+    scrollZoom,
+    mapLayerType,
+    isFullScreen,
+    isViewMyLocation,
+    isViewOtherAddress,
+  } = options;
+  const { selfMarkerColumns, othersMarkerColumns, pathMarkerColumns } = layout;
   const [mapKey, setMapKey] = useState(0);
   const mapInstance = useRef(null);
 
   // position info
   const position = [
-    parseFloat(selectPosition.lat) || 23.8693275,
-    parseFloat(selectPosition.lon) || 90.3926893,
+    parseFloat(selectPosition.lat) || latitude || 23.8693275,
+    parseFloat(selectPosition.lon) || longitude || 90.3926893,
   ];
 
   // for scrollWheelZoom etc...
   useEffect(() => {
     setMapKey((prevKey) => prevKey + 1);
-  }, [scrollZoom,marker,isViewMyLocation,isViewOtherAddress,isMapLayer,style]);
+  }, [
+    scrollZoom,
+    marker,
+    isViewMyLocation,
+    isViewOtherAddress,
+    isMapLayer,
+    style,
+  ]);
 
   // self location by search
   useEffect(() => {
-    if (!routeDirection.fromLocation.lat || !routeDirection.fromLocation.lon) {
+    if (!routeDirection.myLocation.lat || !routeDirection.myLocation.lon) {
       navigator.geolocation.getCurrentPosition((position) => {
         fetch(
           `https://nominatim.openStreetMap.org/reverse?format=json&lat=${position.coords.latitude}&lon=${position.coords.longitude}`
@@ -177,10 +215,10 @@ const OsmBack = ({attributes, setAttributes,device}) => {
           .then((res) => res.json())
           .then((data) => {
             setAttributes({
-              routeDirection: produce(routeDirection, (draft) => {
-                draft.fromLocation.lat = data.lat;
-                draft.fromLocation.lon = data.lon;
-                draft.fromLocation.locationName = data.display_name;
+              map: produce(map, (draft) => {
+                draft.routeDirection.myLocation.lat = data.lat;
+                draft.routeDirection.myLocation.lon = data.lon;
+                draft.routeDirection.myLocation.locationName = data.display_name;
               }),
             });
           })
@@ -190,9 +228,8 @@ const OsmBack = ({attributes, setAttributes,device}) => {
       });
     }
   }, [routeDirection]);
- 
 
- // self location by map button
+  // self location by map button
   const GeolocationControl = () => {
     const map = useMap();
     mapInstance.current = map;
@@ -219,30 +256,36 @@ const OsmBack = ({attributes, setAttributes,device}) => {
     return null;
   };
 
-
   // Full SCreen Function
   const FullscreenControl = () => {
     const map = useMap();
 
     useEffect(() => {
       if (!map) return;
-      const fullscreenControl = L.control.fullscreen({
-        position: 'topleft',
-        title: 'View Fullscreen',
-        titleCancel: 'Exit Fullscreen',
-      }).addTo(map);
+      const fullscreenControl = L.control
+        .fullscreen({
+          position: "topleft",
+          title: "View Fullscreen",
+          titleCancel: "Exit Fullscreen",
+        })
+        .addTo(map);
 
       // Change the icon using CSS
-      const fullscreenButton = document.querySelector('.leaflet-control-fullscreen-button');
+      const fullscreenButton = document.querySelector(
+        ".leaflet-control-fullscreen-button"
+      );
       if (fullscreenButton) {
-        fullscreenButton.style.backgroundImage = 'url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRp9Uvyf1t_DCNvQ_-qklxJ5QYnk_G2W843sQ&s")';
-        fullscreenButton.style.backgroundSize = 'cover';
+        fullscreenButton.style.backgroundImage =
+          'url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRp9Uvyf1t_DCNvQ_-qklxJ5QYnk_G2W843sQ&s")';
+        fullscreenButton.style.backgroundSize = "cover";
       }
-      map.on('fullscreenchange', () => {
+      map.on("fullscreenchange", () => {
         if (map.isFullscreen()) {
-          fullscreenButton.style.backgroundImage = 'url("https://png.pngtree.com/element_our/png/20181205/fullscreen-vector-icon-png_256716.jpg")';
+          fullscreenButton.style.backgroundImage =
+            'url("https://png.pngtree.com/element_our/png/20181205/fullscreen-vector-icon-png_256716.jpg")';
         } else {
-          fullscreenButton.style.backgroundImage = 'url("https://png.pngtree.com/element_our/png/20181205/fullscreen-vector-icon-png_256716.jpg")';
+          fullscreenButton.style.backgroundImage =
+            'url("https://png.pngtree.com/element_our/png/20181205/fullscreen-vector-icon-png_256716.jpg")';
         }
       });
 
@@ -277,9 +320,6 @@ const OsmBack = ({attributes, setAttributes,device}) => {
               />
             )}
 
-            {/* self location by map button */}
-            {isViewMyLocation && <GeolocationControl />}
-
             {/* resetCenterView */}
             <ResetCenterView
               selfMarkerColumns={selfMarkerColumns}
@@ -289,21 +329,22 @@ const OsmBack = ({attributes, setAttributes,device}) => {
               device={device}
               selectPosition={selectPosition}
               routeDirection={routeDirection}
+              isViewOtherAddress={isViewOtherAddress}
             />
+            {/* self location by map button */}
+            {isViewMyLocation && <GeolocationControl />}
+            {/* full screen button in map */}
+            {isFullScreen && <FullscreenControl />}
             {/* map layer */}
             <div>
-            {
-              isMapLayer &&  <MapViewSwitch
-              mapLayerType={mapLayerType}
-              setAttributes={setAttributes}
-              options={options}
-            />
-            }
+              {isMapLayer && (
+                <MapViewSwitch
+                  mapLayerType={mapLayerType}
+                  setAttributes={setAttributes}
+                  options={options}
+                />
+              )}
             </div>
-
-            {/* full screen button in map */}
-            {isFullScreen && <FullscreenControl/>}
-
           </MapContainer>
         </div>
       </div>

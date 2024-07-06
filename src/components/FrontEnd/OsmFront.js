@@ -1,14 +1,14 @@
 
-import React, { useEffect, useRef, useState } from "react";
 import L from "leaflet";
+import 'leaflet-fullscreen';
+import 'leaflet-fullscreen/dist/leaflet.fullscreen.css';
 import "leaflet-routing-machine";
 import "leaflet-routing-machine/dist/leaflet-routing-machine.css";
 import "leaflet.locatecontrol";
 import "leaflet.locatecontrol/dist/L.Control.Locate.min.css";
 import "leaflet/dist/leaflet.css";
-import 'leaflet-fullscreen';
-import 'leaflet-fullscreen/dist/leaflet.fullscreen.css';
-import { MapContainer,TileLayer, useMap } from "react-leaflet";
+import React, { useEffect, useRef, useState } from "react";
+import { MapContainer, TileLayer, useMap } from "react-leaflet";
 import Style from "../Style/Style";
 import useDeviceWidth from "../hooks/useDeviceWidth";
 
@@ -16,14 +16,14 @@ import useDeviceWidth from "../hooks/useDeviceWidth";
 // set location direction
 function ResetCenterView(props) {
   const { selectPosition, routeDirection,selfMarkerColumns,othersMarkerColumns,pathMarkerColumns,marker,device } = props;
-  const { fromLocation } = routeDirection;
+  const { myLocation } = routeDirection;
   const routeControlRef = useRef(null);
   const map = useMap();
 
   const waypoints = [
         {
-          latLng: L.latLng(fromLocation.lat, fromLocation.lon),
-          name: fromLocation.locationName
+          latLng: L.latLng(myLocation.lat, myLocation.lon),
+          name: myLocation.locationName
         },
         {
           latLng: L.latLng(selectPosition.lat, selectPosition.lon),
@@ -144,8 +144,8 @@ const MapViewSwitch = ({layer,setLayer }) => {
   };
 
 const OsmFront = ({attributes}) => {
-  const { cId, map, options,routeDirection,layout,style } = attributes;
-  const { selectPosition,marker} = map;
+  const { cId, map, options,layout,style } = attributes;
+  const { selectPosition,marker,routeDirection} = map;
   const { isMapLayer,scrollZoom, mapLayerType, isFullScreen,isViewMyLocation,isViewOtherAddress } = options;
   const { selfMarkerColumns,othersMarkerColumns,pathMarkerColumns} = layout;
   const [mapKey, setMapKey] = useState(0);

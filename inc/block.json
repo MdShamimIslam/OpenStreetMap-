@@ -4,12 +4,25 @@
   "title": "Open Street Map",
   "description": "Enhance your WordPress site with interactive open-street-map (OSM) blocks.",
   "category": "widgets",
-  "keywords": ["OSM", "osm", "Open Street Map", "open", "Open", "Map", "map","open street map"],
+  "keywords": [
+    "OSM",
+    "osm",
+    "Open Street Map",
+    "open",
+    "Open",
+    "Map",
+    "map",
+    "open street map"
+  ],
   "textdomain": "open-street-map",
   "attributes": {
     "cId": {
       "type": "string",
       "default": ""
+    },
+    "align": {
+      "type": "string",
+      "default": "center"
     },
     "map": {
       "type": "object",
@@ -23,7 +36,19 @@
         "selectPosition": "",
         "searchQuery": "",
         "latitude": "",
-        "longitude": ""
+        "longitude": "",
+        "routeDirection": {
+            "myLocation": {
+              "lat": 0,
+              "lon": 0,
+              "locationName": ""
+            },
+            "toLocation": {
+              "lat": 0,
+              "lon": 0,
+              "locationName": ""
+            }
+        }
       }
     },
     "options": {
@@ -31,9 +56,9 @@
       "default": {
         "scrollZoom": true,
         "isMapLayer": true,
-        "isFullScreen": false,
-        "isViewOtherAddress": false,
-        "isViewMyLocation": false,
+        "isFullScreen": true,
+        "isViewOtherAddress": true,
+        "isViewMyLocation": true,
         "mapLayerType": "default",
         "selectMarker": "start"
       }
@@ -42,7 +67,7 @@
       "type": "object",
       "default": {
         "mapColumns": {
-          "width": { "desktop": "650px", "tablet": "620px", "mobile": "300px" },
+          "width": { "desktop": "620px", "tablet": "620px", "mobile": "300px" },
           "height": { "desktop": "450px", "tablet": "450px", "mobile": "295px" }
         },
         "selfMarkerColumns": {
@@ -62,32 +87,18 @@
     "style": {
       "type": "object",
       "default": {
-        "tooltipColors":{"color":"white","bg":"#4527a4"},
+        "tooltipColors": { "color": "white", "bg": "#4527a4" },
         "tooltipTypo": {},
         "border": {},
-        "padding":{
-          "desktop":{},
-          "tablet":{},
-          "mobile":{}
+        "padding": {
+          "desktop": {},
+          "tablet": {},
+          "mobile": {}
         },
-        "zoom":15
-      }
-    },
-    "routeDirection": {
-      "type": "object",
-      "default": {
-        "fromLocation": {
-          "lat": 0,
-          "lon": 0,
-          "locationName": ""
-        },
-        "toLocation": {
-          "lat": 0,
-          "lon": 0,
-          "locationName": ""
-        }
+        "zoom": 15
       }
     }
+   
   },
   "supports": {
     "align": ["wide", "full"],
