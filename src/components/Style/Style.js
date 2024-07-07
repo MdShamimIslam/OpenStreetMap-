@@ -1,28 +1,41 @@
 import React from 'react';
-import { getBorderCSS} from '../../../../Components/utils/getCSS';
+import { getBorderCSS,getColorsCSS, getTypoCSS} from '../../../../Components/utils/getCSS';
 
 const Style = ({ attributes }) => {
   const { cId, layout, style } = attributes;
   const { width, height } = layout.mapColumns;
-  const { border } = style;
+  const { tooltipColors,border,tooltipTypo } = style;
   const mainWrapper = `#osmHelloBlock-${cId}`;
   const mapWrapper = `${mainWrapper} .maps .mapContainer`;
-
+  const leafletWrapper = `${mainWrapper} .leaflet-popup-content-wrapper`;
   return (
     <style>
 
       {`
-        
+        ${getTypoCSS('', tooltipTypo)?.googleFontLink}
         ${mapWrapper}{
           ${getBorderCSS(border)};
           width: ${width.desktop};
           height: ${height.desktop};
         }
 
+        ${getTypoCSS(`${leafletWrapper}`, tooltipTypo)?.styles}
+        ${leafletWrapper}{
+        ${getColorsCSS(tooltipColors)};
+        font-size : ${tooltipTypo.desktop};
+        }
+       
+
         @media only screen and (min-width:641px) and (max-width: 1024px){
          ${mapWrapper}{
           width: ${width.tablet};
           height: ${height.tablet};
+        }
+
+        ${getTypoCSS(`${leafletWrapper}`, tooltipTypo)?.styles}
+          ${leafletWrapper}{
+          ${getColorsCSS(tooltipColors)};
+          font-size : ${tooltipTypo.tablet};
         }
         }
 
@@ -30,6 +43,12 @@ const Style = ({ attributes }) => {
          ${mapWrapper}{
           width: ${width.mobile};
           height: ${height.mobile};
+        }
+
+        ${getTypoCSS(`${leafletWrapper}`, tooltipTypo)?.styles}
+          ${leafletWrapper}{
+          ${getColorsCSS(tooltipColors)};
+          font-size : ${tooltipTypo.mobile};
         }
         }
 

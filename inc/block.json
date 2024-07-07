@@ -28,9 +28,10 @@
       "type": "object",
       "default": {
         "marker": {
-          "url": "https://png.pngtree.com/png-clipart/20230123/original/pngtree-flat-red-location-sign-png-image_8927579.png",
-          "toUrl": "https://png.pngtree.com/png-clipart/20230123/original/pngtree-flat-red-location-sign-png-image_8927579.png",
-          "pathUrl": "https://i.pinimg.com/474x/94/df/b6/94dfb68e3b5ef24ec89c23044247ea91.jpg"
+          "currentUrl":"https://png.pngtree.com/png-clipart/20230123/original/pngtree-flat-red-location-sign-png-image_8927579.png",
+          "fromUrl": "https://www.openstreetmap.org/assets/marker-green-2de0354ac458a358b9925a8b7f5746324122ff884605073e1ee602fe8006e060.png",
+          "toUrl": "https://www.openstreetmap.org/assets/marker-red-ea1f472cd753fdbe59b263a7dc4886006415079498be4d13a18c12ed33ac5b26.png",
+          "pathUrl": "https://png.pngtree.com/png-clipart/20230123/original/pngtree-flat-red-location-sign-png-image_8927579.png"
         },
         "listPlace": [],
         "selectPosition": "",
@@ -38,12 +39,24 @@
         "latitude": "",
         "longitude": "",
         "routeDirection": {
-            "myLocation": {
+            "fromLocation": {
               "lat": 0,
               "lon": 0,
               "locationName": ""
             },
             "toLocation": {
+              "lat": 0,
+              "lon": 0,
+              "locationName": ""
+            }
+        },
+        "fromAndDestination": {
+            "fromLocation": {
+              "lat": 0,
+              "lon": 0,
+              "locationName": ""
+            },
+            "destinationLocation": {
               "lat": 0,
               "lon": 0,
               "locationName": ""
@@ -55,10 +68,12 @@
       "type": "object",
       "default": {
         "scrollZoom": true,
+        "isViewLatLon": true,
+        "isRoutingControl": false,
         "isMapLayer": true,
         "isFullScreen": true,
-        "isViewOtherAddress": true,
         "isViewMyLocation": true,
+        "isDestination": false,
         "mapLayerType": "default",
         "selectMarker": "start"
       }
@@ -70,17 +85,21 @@
           "width": { "desktop": "620px", "tablet": "620px", "mobile": "300px" },
           "height": { "desktop": "450px", "tablet": "450px", "mobile": "295px" }
         },
+        "markerColumns": {
+          "width": { "desktop": 30, "tablet": 30, "mobile": 30 },
+          "height": { "desktop": 40, "tablet": 40, "mobile": 40 }
+        },
         "selfMarkerColumns": {
-          "width": { "desktop": 40, "tablet": 35, "mobile": 30 },
-          "height": { "desktop": 40, "tablet": 35, "mobile": 30 }
+          "width": { "desktop": 15, "tablet": 15, "mobile": 15 },
+          "height": { "desktop": 30, "tablet": 30, "mobile": 30 }
         },
         "othersMarkerColumns": {
-          "width": { "desktop": 40, "tablet": 35, "mobile": 30 },
-          "height": { "desktop": 40, "tablet": 35, "mobile": 30 }
+          "width": { "desktop": 15, "tablet": 15, "mobile": 15 },
+          "height": { "desktop": 30, "tablet": 30, "mobile": 30 }
         },
         "pathMarkerColumns": {
-          "width": { "desktop": 40, "tablet": 35, "mobile": 30 },
-          "height": { "desktop": 40, "tablet": 35, "mobile": 30 }
+          "width": { "desktop": 15, "tablet": 15, "mobile": 15 },
+          "height": { "desktop": 30, "tablet": 30, "mobile": 30 }
         }
       }
     },
@@ -88,14 +107,9 @@
       "type": "object",
       "default": {
         "tooltipColors": { "color": "white", "bg": "#4527a4" },
-        "tooltipTypo": {},
+        "tooltipTypo": { "fontSize": 13 },
         "border": {},
-        "padding": {
-          "desktop": {},
-          "tablet": {},
-          "mobile": {}
-        },
-        "zoom": 15
+        "zoom": 8
       }
     }
    

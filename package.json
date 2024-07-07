@@ -23,6 +23,7 @@
     "immer": "^10.1.1",
     "jspdf": "^2.5.1",
     "leaflet": "^1.9.4",
+    "leaflet-control-geocoder": "^2.4.0",
     "leaflet-fullscreen": "^1.0.2",
     "leaflet-routing-machine": "^3.2.12",
     "leaflet.locatecontrol": "^0.81.1",

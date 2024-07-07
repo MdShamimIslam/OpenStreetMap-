@@ -1,141 +1,190 @@
-
 // leaflet custom style start
-
-
+// .leaflet-popup-content-wrapper{
+// 	background: #1c858c !important;
+// }
+// .leaflet-popup-content{
+// 	color: red;
+// }
 // leaflet custom style end
 
-// search control button and input field start
-
-.sBtn{
-	background: #4527a4;
-	color: white;
-	border-radius: 0px 50px 50px 0px;
-	border:none;
+// Leaflet Control Container Style
+.leaflet-top.leaftlet-left {
+  display: flex;
+  flex-direction: column;
+}
+.leaflet-top.leaftlet-left > div {
+  width: fit-content;
+}
+.leaflet-top.leaftlet-left .leaflet-routing-container {
+  flex: 1;
+}
+.leaflet-routing-container-hide .leaflet-routing-collapse-btn  {
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3C!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--%3E%3Cpath d='M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM288 176c0-44.2-35.8-80-80-80s-80 35.8-80 80c0 48.8 46.5 111.6 68.6 138.6c6 7.3 16.8 7.3 22.7 0c22.1-27 68.6-89.8 68.6-138.6zm-112 0a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z'/%3E%3C/svg%3E") !important;
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: cover;
+    background-repeat: no-repeat;
+    background-size: 20px 20px;
+    margin-top: -5px;
+    margin-left: -2px;
 	cursor: pointer;
-	padding: 5px 8px;
-	margin-left: -5px;
-	height: 30px;
-	margin-top: 10px;
 }
-.sBtn:hover{
-	background: #1c858c;
-	color: white;
+// Block heading style start
+.wp-block.wp-block-post-title.block-editor-block-list__block.editor-post-title.editor-post-title__input.rich-text {
+  text-align: center;
+  font-size: 26px;
+  color: #0dae43;
+}
+// Block heading style end
+
+// search control button and input field start
+.sBtn {
+  background: #4527a4;
+  color: white;
+  border-radius: 0px 50px 50px 0px;
+  border: none;
+  cursor: pointer;
+  padding: 5px 8px;
+  margin-left: -5px;
+  height: 30px;
+  margin-top: 10px;
+}
+.sBtn:hover {
+  background: #1c858c;
+  color: white;
 }
 
-.inputField{
-	  margin-top: 10px;
-      margin-bottom: 23px;
-		
+.inputField {
+  margin-top: 10px;
+  margin-bottom: 23px;
 }
-.inputField input{
-	width: 215px;
-	height: 30px;
-	border-radius: 50px 0 0 50px;
+.inputField input {
+  width: 215px;
+  height: 30px;
+  border-radius: 50px 0 0 50px;
 }
-.inputField input:focus{
-	outline: none;
-	box-shadow: none;
+.inputField input:focus {
+  outline: none;
+  box-shadow: none;
 }
 // search control button input field end
 
-
-
-// content and style setting start
-.customWidth,.colorsPar{
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
+// from input destination
+.fromInput {
+  margin: 5px 0;
+  width: 250px;
+}
+.fInput input {
+  border-radius: 0px;
+}
+.fInput input:focus {
+  outline: none;
+  box-shadow: none;
+}
+// button
+.desBtn button {
+  background: #4527a4;
+  color: white;
+  border-radius: 10px 0 10px 0;
+  border: none;
+  cursor: pointer;
+  padding: 7px 0px;
+  width: 100px;
+  margin-top: 6px;
+}
+.desBtn button:hover {
+  background: #1c858c;
+  color: white;
 }
 
-.widthChild{
-	margin-bottom: -5px;
-	font-weight: 500;
-	color: #4524a4;
+// content and style setting start
+.customWidth,
+.colorsPar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.widthChild {
+  margin-bottom: -5px;
+  font-weight: 500;
+  color: #4524a4;
 }
 // content and style setting end
 
-
-
 // content mediaUpload button start
-.mediaBtn{
-	background: #4527a4;
-	color: white;
-	height: 32px;
-	margin-top: 16px;
-	margin-left:-5px
+.mediaBtn {
+  background: #4527a4;
+  color: white;
+  height: 32px;
+  margin-top: 16px;
+  margin-left: -5px;
 }
 // content mediaUpload button end
 
-
-
 // ListPlace start
-.listPlace{
-display: flex;
-align-items: center;
-gap: 5px;
-cursor: pointer;
+.listPlace {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
 }
-.listPlace:hover{
-background: #4527a4;
-color: white;
-padding: 5px;
-border-radius: 5px;
+.listPlace:hover {
+  background: #4527a4;
+  color: white;
+  padding: 5px;
+  border-radius: 5px;
 }
 // ListPlace end
 
-
 // osmBack from and to  button start
 .input-container {
-	display: flex;
-	gap: 5px;
-	margin-bottom: 10px;
-  }
-  
-  .input-container input,
-  .input-container select {
-	flex: 1;
-	padding: 5px;
-  }
-  
-  .input-container button {
-	padding: 5px 10px;
-  }
-  
-  .travel-info {
-	margin-top: 10px;
-  }
+  display: flex;
+  gap: 5px;
+  margin-bottom: 10px;
+}
+
+.input-container input,
+.input-container select {
+  flex: 1;
+  padding: 5px;
+}
+
+.input-container button {
+  padding: 5px 10px;
+}
+
+.travel-info {
+  margin-top: 10px;
+}
 
 // osmBack from and to  button end
 
-
-
-
-
 // latitude and longitude start content setting
-.latLanPar{
-	display: flex;
-	align-items: center;
-	gap: 5px;
+.latLanPar {
+  display: flex;
+  align-items: center;
+  gap: 5px;
 }
-.nmbr{
-margin-top: -12px;
+.nmbr {
+  margin-top: -12px;
+  width: 123px;
 }
-.latAndLonBtn button{
-	background: #4527a4;
-	color: white;
-	border-radius: 3px;
-	border:none;
-	cursor: pointer;
-	padding: 7px 0px;
-	width: 250px;
+.latAndLonBtn button {
+  background: #4527a4;
+  color: white;
+  border-radius: 10px 0 10px 0;
+  border: none;
+  cursor: pointer;
+  padding: 7px 0px;
+  width: 250px;
 }
-.latAndLonBtn button:hover{
-	background: #1c858c;
-	color: white;
+.latAndLonBtn button:hover {
+  background: #1c858c;
+  color: white;
 }
 
 // latitude and longitude end content setting
-
 
 // map type layer start
 .mapViewSwitch {
@@ -147,11 +196,10 @@ margin-top: -12px;
   border-radius: 4px;
   box-shadow: 0 1px 5px rgba(0, 0, 0, 0.65);
 }
-.mapViewBtn{
-	display:flex;
-	align-items: center;
-	gap: 5px;
-	
+.mapViewBtn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
 }
 
 .mapViewSwitch .mapViewBtn {
@@ -170,58 +218,40 @@ margin-top: -12px;
   padding: 0 1px;
 }
 
-// .mapViewSwitch .vertical-divider {
-//   width: 1px;
-//   height: 20px;
-//   background: #ccc;
-//   margin: 0 10px;
-// }
-
 .mapViewSwitch .mapViewBtn.active {
   background-color: #4527a4;
-  color:white;
-  
+  color: white;
 }
 // map type layer start
-
-
-
-
-
-
-
-
-
-
 
 $primaryColor: #4527a4;
 
 // Common CSS
 html {
-	scroll-behavior: smooth;
+  scroll-behavior: smooth;
 }
 
 // Dashicon
 .dashicons {
-	font-family: dashicons !important;
+  font-family: dashicons !important;
 }
 
 // Block Name
 .wp-block-prefix-block-name {
-	* {
-		box-sizing: border-box;
-	}
+  * {
+    box-sizing: border-box;
+  }
 
-	.prefixBlockName {
-		display: inline-block;
-	}
+  .prefixBlockName {
+    display: inline-block;
+  }
 
-	.icon {
-		font-style: inherit;
-	}
+  .icon {
+    font-style: inherit;
+  }
 
-	img {
-		width: 100%;
-		max-width: 100%;
-	}
+  img {
+    width: 100%;
+    max-width: 100%;
+  }
 }

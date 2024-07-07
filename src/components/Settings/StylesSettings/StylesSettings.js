@@ -7,19 +7,24 @@ import {
 import { __ } from "@wordpress/i18n";
 import { updateData } from "../../../utils/functions";
 import { Device } from "../../../../../Components/Device/Device";
-import { BorderControl, ColorsControl, Typography } from "../../../../../Components";
+import {
+  BorderControl,
+  ColorsControl,
+  Typography,
+} from "../../../../../Components";
 import { Tab } from "bpl-gutenberg-panel";
-import { BBoxControl } from "../../../BBoxControl/BBoxControl";
+import { produce } from "immer";
 
 const StylesSettings = ({ attributes, setAttributes, device }) => {
   const { layout, options, style } = attributes;
   const { selectMarker } = options;
-  const { tooltipColors,tooltipTypo, border, padding } = style;
+  const { tooltipColors, tooltipTypo, border } = style;
   const { width, height } = layout.mapColumns;
-  const { selfMarkerColumns, othersMarkerColumns, pathMarkerColumns } = layout;
-
+  const { markerColumns,selfMarkerColumns, othersMarkerColumns, pathMarkerColumns } = layout;
+  console.log(tooltipTypo);
   return (
     <div>
+      {/* map */}
       <PanelBody title={__("Map", "open-street-map")} initialOpen={false}>
         {/* tooltip color and background */}
         <div className="customWidth">
@@ -41,15 +46,9 @@ const StylesSettings = ({ attributes, setAttributes, device }) => {
           <Typography
             label=""
             value={tooltipTypo}
-            onChange={(v) =>
-              setAttributes({
-                style: updateData(
-                  style,
-                  v,
-                  "tooltipTypo"
-                ),
-              })
-            }
+            onChange={(v) => setAttributes({style:produce(style,draft=>{
+              draft.tooltipTypo=v
+            })})  }
             defaults={{ fontSize: 13 }}
           />
         </div>
@@ -102,30 +101,69 @@ const StylesSettings = ({ attributes, setAttributes, device }) => {
             />
           </div>
         </div>
-        {/* padding */}
-        <div>
-          <div className="customWidth">
-            <p className="widthChild">Padding</p>
-            <PanelRow>
-              <Device />
-            </PanelRow>
-          </div>
-          <BBoxControl
-            label=""
-            values={padding[device]}
-            onChange={(v) =>
-              setAttributes({ style: updateData(style, v, "padding", device) })
-            }
-          ></BBoxControl>
-        </div>
       </PanelBody>
+      {/* marker */}
       <PanelBody
         className="bPlPanelBody"
         title={__("Marker", "open-street-map")}
         initialOpen={false}
       >
+        {/* Width */}
+        <div>
+          <div className="customWidth">
+            <p className="widthChild">Width</p>
+            <PanelRow>
+              <Device />
+            </PanelRow>
+          </div>
+          <RangeControl
+            allowReset
+            value={markerColumns.width[device]}
+            onChange={(v) =>
+              setAttributes({
+                layout: updateData(
+                  layout,
+                  v,
+                  "markerColumns",
+                  "width",
+                  device
+                ),
+              })
+            }
+            min={1}
+            max={100}
+          />
+        </div>
+        {/* height */}
+        <div>
+          <div className="customWidth">
+            <p className="widthChild">Height</p>
+            <PanelRow>
+              <Device />
+            </PanelRow>
+          </div>
+          <RangeControl
+            allowReset
+            value={markerColumns.height[device]}
+            onChange={(v) =>
+              setAttributes({
+                layout: updateData(
+                  layout,
+                  v,
+                  "markerColumns",
+                  "height",
+                  device
+                ),
+              })
+            }
+            min={1}
+            max={100}
+          />
+        </div>
         <div style={{ marginTop: "15px" }}>
+          <p className="widthChild">From and Destination</p>
           <Tab
+            style={{ marginTop: "10px" }}
             options={["Start", "End", "Intermediate"]}
             value={selectMarker}
             onChange={(val) =>

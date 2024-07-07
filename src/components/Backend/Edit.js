@@ -119,10 +119,8 @@ const Edit = (props) => {
       <OsmBack
         attributes={attributes}
         setAttributes={setAttributes}
-        searchText={searchText}
-        handleSearch={handleSearch}
-        handleInputChange={handleInputChange}
         device={device}
+        searchText={searchText}
       />
     </>
   );
