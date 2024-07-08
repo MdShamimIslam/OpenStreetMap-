@@ -5,3 +5,9 @@ export const mapTypeOptions = [
   { label: 'Default', value: 'default' },
   { label: 'Satellite', value: 'satellite' }
 ]
+
+export const routingSytemOptions = [
+  { label: 'None', value: 'none' },
+  { label: 'From and Destination Distance', value: 'distance' },
+  { label: 'Routing Control', value: 'routingControl' }
+]

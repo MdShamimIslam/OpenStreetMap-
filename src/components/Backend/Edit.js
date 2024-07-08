@@ -48,8 +48,7 @@ const Edit = (props) => {
       .catch((error) => console.log("Error is :", error));
   };
   // Handle from Search
-  const handleFromSearch = (query) => {
-    
+  const handleFromSearch = async (query) => {
     const params = {
       q: query,
       format: "json",
@@ -61,24 +60,11 @@ const Edit = (props) => {
       method: "GET",
       redirect: "follow",
     };
-    fetch(`${NOM_URL}${queryString}`, requestOptions)
-      .then((res) => res.text())
-      .then((result) => {
-        const arrayResult = JSON.parse(result);
-        const searchFromLocation = arrayResult[0];
-        // return searchFromLocation;
-        setAttributes({
-          map: produce(map, (draft) => {
-            draft.selectFromPosition = searchFromLocation;
-            draft.fromListPlace = [];
-            draft.fromSearchQuery = query;
-          }),
-        });
-      })
-      .catch((error) => console.log("Error is :", error));
+   const response = await fetch(`${NOM_URL}${queryString}`, requestOptions)
+   return await response.json();
   };
   // Handle destination Search
-  const handleDesSearch = (query) => {
+  const handleDesSearch = async (query) => {
     const params = {
       q: query,
       format: "json",
@@ -90,25 +76,8 @@ const Edit = (props) => {
       method: "GET",
       redirect: "follow",
     };
-    fetch(`${NOM_URL}${queryString}`, requestOptions)
-      .then((res) => res.text())
-      .then((result) => {
-        const arrayResult = JSON.parse(result);
-        const searchDesLocation = arrayResult[0];
-        // return searchDesLocation;
-        setAttributes({
-          map: produce(map, (draft) => {
-            draft.selectDestinationPosition = searchDesLocation;
-            draft.desListPlace = [];
-            draft.destination.lat = "";
-            draft.destination.lon = "";
-            draft.from.lat = "";
-            draft.from.lon = "";
-            draft.DesSearchQuery = query;
-          }),
-        });
-      })
-      .catch((error) => console.log("Error is :", error));
+    const response = await fetch(`${NOM_URL}${queryString}`, requestOptions)
+    return await response.json();
   };
 
   // Search handle input change

@@ -11,17 +11,18 @@ import "leaflet.locatecontrol";
 import "leaflet.locatecontrol/dist/L.Control.Locate.min.css";
 import "leaflet/dist/leaflet.css";
 import { MapContainer, Marker, Popup, TileLayer, useMap } from "react-leaflet";
+import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
 
 // set froma nd des location
 function ResetCenterView(props) {
-  const { selectPosition, selectFromPosition, selectDestinationPosition, isViewLatLon, selfMarkerColumns, othersMarkerColumns, pathMarkerColumns, device, marker } = props;
+  const { selectPosition, selectFromPosition, selectDestinationPosition, isViewLatLon, selfMarkerColumns, othersMarkerColumns, pathMarkerColumns, device, marker,routingSystem } = props;
 
   const map = useMap();
   const routeControlRef = useRef(null);
 
   useEffect(() => {
     if (selectPosition) {
-      console.log('Setting view to:', selectPosition);
       map.setView(
         L.latLng(selectPosition.lat, selectPosition.lon),
         map.getZoom(),
@@ -45,7 +46,7 @@ function ResetCenterView(props) {
   }, [selectPosition, isViewLatLon, map]);
 
   useEffect(() => {
-    if (selectFromPosition && selectDestinationPosition) {
+    if ( routingSystem === 'distance' && selectFromPosition && selectDestinationPosition) {
       const waypoints = [
         {
           latLng: L.latLng(selectFromPosition.lat, selectFromPosition.lon),
@@ -67,7 +68,7 @@ function ResetCenterView(props) {
 
       routeControlRef.current = L.Routing.control({
         waypoints,
-        position: 'topleft',
+        position: 'topright',
         createMarker: (i, waypoint, n) => {
           let markerOptions = {};
 
@@ -142,6 +143,7 @@ function ResetCenterView(props) {
     device,
     marker,
     map,
+    routingSystem
   ]);
 
   return null;
@@ -195,9 +197,7 @@ const MapViewSwitch = ({ mapLayerType, setAttributes, options }) => {
 
 const OsmBack = ({ attributes, setAttributes, device}) => {
   const { cId, map, options, layout, style } = attributes;
-  const { selectPosition,selectFromPosition,selectDestinationPosition, marker, routeDirection,searchQuery } = map;
-
-
+  const { selectPosition,selectFromPosition,selectDestinationPosition, marker, routeDirection,searchQuery,routingSystem } = map;
   const { fromLocation, toLocation } = routeDirection;
   const routingControlRef = useRef(null);
   const {
@@ -207,17 +207,13 @@ const OsmBack = ({ attributes, setAttributes, device}) => {
     mapLayerType,
     isFullScreen,
     isViewMyLocation,
-    isRoutingControl,
-    isDestination
+   isDownloadPDF
   } = options;
   const { markerColumns,selfMarkerColumns, othersMarkerColumns, pathMarkerColumns } = layout;
   const [mapKey, setMapKey] = useState(0);
   const mapInstance = useRef(null);
   const locationSelection = [  selectPosition?.lat || 25.7494, selectPosition?.lon || 89.2611 ];
 
-  console.log("from:",selectFromPosition.lat);
-  console.log("des:",selectDestinationPosition.lat);
-  
   // position and icon info
   const position = [
     parseFloat(selectPosition.lat) || 25.7494,
@@ -238,7 +234,7 @@ const OsmBack = ({ attributes, setAttributes, device}) => {
     isMapLayer,
     style,
     isViewLatLon,
-    searchQuery
+    searchQuery,isDownloadPDF
   ]);
 
   // get self location
@@ -281,7 +277,6 @@ const OsmBack = ({ attributes, setAttributes, device}) => {
   const RoutingControl = () => {
     const map = useMap();
 
-    if(!isDestination){
       useEffect(() => {
         if (routingControlRef.current) {
           map.removeControl(routingControlRef.current);
@@ -294,7 +289,7 @@ const OsmBack = ({ attributes, setAttributes, device}) => {
   
           routingControlRef.current = L.Routing.control({
             waypoints: [fromLatLng, toLatLng],
-            position: 'topleft',
+            position: 'topright',
             // routeWhileDragging: true,
             geocoder: L.Control.Geocoder.nominatim(),
             createMarker: (i, waypoint, n) => {
@@ -341,9 +336,6 @@ const OsmBack = ({ attributes, setAttributes, device}) => {
       }, [map, fromLocation, toLocation,marker, device]);
   
       return null;
-    }
-
-   
   };
 
   // self location by map button
@@ -412,12 +404,51 @@ const OsmBack = ({ attributes, setAttributes, device}) => {
     return null;
   };
 
+  // Create toggleVisibility function
+  const toggleVisibility = (selector, visible) => {
+    const elements = document.querySelectorAll(selector);
+    elements.forEach((element) => {
+        if (visible) {
+            element.classList.remove('hidden');
+        } else {
+            element.classList.add('hidden');
+        }
+    });
+};
+
+ const downloadPDF = async () => {
+  // Hide unnecessary elements except the map and marker
+  toggleVisibility('.leaflet-control-container, .mapViewSwitch, .leaflet-popup-pane', false);
+
+  // Capture map as canvas
+  const mapElement = document.querySelector('.leaflet-container');
+  const canvas = await html2canvas(mapElement, {
+      useCORS: true,
+      logging: true,
+      backgroundColor: null,
+  });
+
+  // Generate PDF
+  const pdf = new jsPDF({
+      orientation: 'landscape',
+      unit: 'px',
+      format: [canvas.width, canvas.height]
+  });
+  const imgData = canvas.toDataURL('image/png');
+  pdf.addImage(imgData, 'PNG', 0, 0, canvas.width, canvas.height);
+  pdf.save('map.pdf');
+
+  // Restore visibility of all elements
+  toggleVisibility('.leaflet-control-container, .mapViewSwitch, .leaflet-popup-pane', true);
+};
+
   return (
     <>
        {/* style */} 
       <Style attributes={attributes}></Style>
-
-           {/* Backend Map */}
+       {/* Add the download button */}
+      {isDownloadPDF && <button onClick={downloadPDF} >Download Location</button>}
+      {/* Backend Map */}
       <div id={`osmHelloBlock-${cId}`}>
         <div className="maps">
           <MapContainer
@@ -445,7 +476,7 @@ const OsmBack = ({ attributes, setAttributes, device}) => {
             </Marker>
 
             {/* Destination */}
-            {isRoutingControl && !isDestination && <RoutingControl/>}
+            { routingSystem === 'routingControl' && <RoutingControl/>}
 
             {/* resetCenterView */}
             <ResetCenterView
@@ -458,6 +489,7 @@ const OsmBack = ({ attributes, setAttributes, device}) => {
               pathMarkerColumns={pathMarkerColumns}
               device={device}
               marker={marker}
+              routingSystem={routingSystem}
             />
             {/* self location by map button */}
             {isViewMyLocation  && <GeolocationControl />}
@@ -476,6 +508,8 @@ const OsmBack = ({ attributes, setAttributes, device}) => {
               )}
             </div>
           </MapContainer>
+           
+            
         </div>
       </div>
     </>

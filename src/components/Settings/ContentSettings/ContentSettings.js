@@ -11,7 +11,7 @@ import {
 import { __ } from "@wordpress/i18n";
 import { produce } from "immer";
 import { updateData } from "../../../utils/functions";
-import { mapTypeOptions, searchIcon } from "../../../utils/options";
+import { mapTypeOptions, routingSytemOptions, searchIcon } from "../../../utils/options";
 
 const ContentSettings = ({
   attributes,
@@ -27,11 +27,21 @@ const ContentSettings = ({
   handleFromInputChange,
   desSearchText,
   setDesSearchText,
-  handleDesInputChange
+  handleDesInputChange,
 }) => {
   const { map, options, style } = attributes;
-  const { marker, listPlace,fromListPlace,desListPlace, latitude, longitude,from,destination } = map;
-  const { currentUrl,fromUrl, toUrl, pathUrl } = marker;
+  const {
+    marker,
+    listPlace,
+    fromListPlace,
+    desListPlace,
+    latitude,
+    longitude,
+    from,
+    destination,
+    routingSystem
+  } = map;
+  const { currentUrl, fromUrl, toUrl, pathUrl } = marker;
   const {
     scrollZoom,
     isViewLatLon,
@@ -39,14 +49,30 @@ const ContentSettings = ({
     isFullScreen,
     isViewMyLocation,
     isMapLayer,
-    isDestination,
-    isRoutingControl
+    isDownloadPDF,
   } = options;
-    
-  // Function calling both search handlers
-  const handleFromAndDesBtn = ()=>{
-    handleFromSearch(fromSearchText);
-    handleDesSearch(desSearchText);
+
+  // Function calling both(from and des) search handlers
+  const handleFromAndDesBtn = async () => {
+    const fromInfo = await handleFromSearch(fromSearchText);
+    const destinationInfo = await handleDesSearch(desSearchText);
+    // set from and destination data in attributes
+    setAttributes({
+      map: produce(map, (draft) => {
+        // from
+        draft.selectFromPosition = fromInfo[0];
+        draft.fromListPlace = [];
+        draft.fromSearchQuery = fromSearchText;
+        // destination
+        draft.selectDestinationPosition = destinationInfo[0];
+        draft.desListPlace = [];
+        draft.destination.lat = "";
+        draft.destination.lon = "";
+        draft.from.lat = "";
+        draft.from.lon = "";
+        draft.DesSearchQuery = desSearchText;
+      }),
+    });
   };
 
   // set lat and lon in selectionPosition attributes
@@ -65,46 +91,36 @@ const ContentSettings = ({
     }
   };
 
-// handle from and des latlon btn
-const handleFromAndDesLatLonBtn = ()=>{
-  if((from.lat && from.lon) && (destination.lat && destination.lon)){
-    setAttributes({
-      map: produce(map, (draft) => {
-        draft.selectFromPosition = {
-          lat: parseFloat(from.lat),
-          lon: parseFloat(from.lon),
-        };
-        draft.selectDestinationPosition = {
-          lat: parseFloat(destination.lat),
-          lon: parseFloat(destination.lon),
-        };
-        draft.fromListPlace = [];
-        draft.desListPlace = [];
-      }),
-    });
-    setFromSearchText("");
-    setDesSearchText("");
-
-  }
-}
-// custom style for margin-top
-const marginTop = isDestination && isRoutingControl
-    ? "15px"
-    : !isDestination && !isRoutingControl
-    ? "10px"
-    : isDestination && !isRoutingControl
-    ? "10px"
-    : !isDestination && isRoutingControl
-    ? "35px"
-    : "10px";
-
+  // handle from and des latlon btn
+  const handleFromAndDesLatLonBtn = () => {
+    if (from.lat && from.lon && destination.lat && destination.lon) {
+      setAttributes({
+        map: produce(map, (draft) => {
+          draft.selectFromPosition = {
+            lat: parseFloat(from.lat),
+            lon: parseFloat(from.lon),
+          };
+          draft.selectDestinationPosition = {
+            lat: parseFloat(destination.lat),
+            lon: parseFloat(destination.lon),
+          };
+          draft.fromListPlace = [];
+          draft.desListPlace = [];
+        }),
+      });
+      setFromSearchText("");
+      setDesSearchText("");
+    }
+  };
   return (
     <>
       {/* map */}
       <PanelBody title={__("Map", "open-street-map")} initialOpen={true}>
+        {/* Single Input field and search when routingSystem isn't distance  */}
         <div>
-          {!isDestination && (
-            <div>
+          {
+            routingSystem !== 'distance' && (
+              <div>
               {/* location search  Control */}
               <div>
                 <p className="widthChild">Search Location</p>
@@ -195,27 +211,29 @@ const marginTop = isDestination && isRoutingControl
                 </div>
               </div>
             </div>
-          )}
+            )
+          }
+            
         </div>
-
-        {/* Destination Input field and search */}
+        {/* From and  Destination Input field and search if routingSystem is distance */}
         <div>
-          {isDestination && (
+          {
+            routingSystem === 'distance' && (
             <div>
               {/* Query Search */}
-             <div>
-              {/* from start */}
+              <div>
+                {/* from start */}
                 <div className="fInput">
-                    <p className="widthChild">From</p>
-                    <input
-                      value={fromSearchText}
-                      onChange={(e) => handleFromInputChange(e.target.value)}
-                      type="text"
-                      placeholder="Type From Location..."
-                      className="fromInput"
-                    />
-                  </div>
-                  {/* show from search location */}
+                  <p className="widthChild">From</p>
+                  <input
+                    value={fromSearchText}
+                    onChange={(e) => handleFromInputChange(e.target.value)}
+                    type="text"
+                    placeholder="Type From Location..."
+                    className="fromInput"
+                  />
+                </div>
+                {/* show from search location  */}
                 <div className="location">
                   {fromListPlace.length > 0 &&
                     fromListPlace.map((item) => (
@@ -244,20 +262,20 @@ const marginTop = isDestination && isRoutingControl
                       </div>
                     ))}
                 </div>
-              {/* from end */}
+                {/* from end */}
 
                 {/* destination start */}
-                  <div className="fInput">
-                    <p className="widthChild">Destination</p>
-                    <input
-                      value={desSearchText}
-                      onChange={(e) => handleDesInputChange(e.target.value)}
-                      type="text"
-                      placeholder="Type Destination Location..."
-                      className="fromInput"
-                    />
-                  </div>
-                   {/* show destination search location */}
+                <div className="fInput">
+                  <p className="widthChild">Destination</p>
+                  <input
+                    value={desSearchText}
+                    onChange={(e) => handleDesInputChange(e.target.value)}
+                    type="text"
+                    placeholder="Type Destination Location..."
+                    className="fromInput"
+                  />
+                </div>
+                {/* show destination search location */}
                 <div className="location">
                   {desListPlace.length > 0 &&
                     desListPlace.map((item) => (
@@ -286,116 +304,129 @@ const marginTop = isDestination && isRoutingControl
                       </div>
                     ))}
                 </div>
-              {/* destination end */}
+                {/* destination end */}
 
-              {/* From and des button handle */}
-                  <div className="desBtn">
-                    <button onClick={()=>handleFromAndDesBtn()}>Search Here</button>
-                  </div>
-                  <small style={{color:"gray"}}>It is still in progress...</small>
-             </div>
-             <p style={{ textAlign: "center" }} className="widthChild"> OR </p>
-             {/* Lat-lon Search */}
-             <div>
-              {/* from lat and lon */}
-             <div>
+                {/* From and des button handle */}
+                <div className="desBtn">
+                  <button onClick={() => handleFromAndDesBtn()}>
+                    Search Here
+                  </button>
+                </div>
+              </div>
+              <p style={{ textAlign: "center" }} className="widthChild">
+                {" "}
+                OR{" "}
+              </p>
+              {/* Lat-lon Search */}
+              <div>
+                {/* from lat and lon */}
+                <div>
                   <p className="widthChild"> From </p>
                   <div className="fromLatLon">
-                   <div> <NumberControl
-                      className=""
-                      placeholder={__("Type Latitude...", "open-street-map")}
-                      label=""
-                      value={from.lat}
-                      onChange={(v) =>
-                        setAttributes({
-                          map: updateData(map, parseFloat(v), "from","lat"),
-                        })
-                      }
-                    /></div>
-                  
-                   <div> <NumberControl
-                      className=""
-                      placeholder={__("Type Longitude...", "open-street-map")}
-                      label=""
-                      value={from.lon}
-                      onChange={(v) => {
-                        setAttributes({
-                          map: updateData(map, parseFloat(v), "from","lon"),
-                        });
-                      }}
-                    /></div>
+                    <div>
+                      {" "}
+                      <NumberControl
+                        className=""
+                        placeholder={__("Type Latitude...", "open-street-map")}
+                        label=""
+                        value={from.lat}
+                        onChange={(v) =>
+                          setAttributes({
+                            map: updateData(map, parseFloat(v), "from", "lat"),
+                          })
+                        }
+                      />
+                    </div>
+
+                    <div>
+                      {" "}
+                      <NumberControl
+                        className=""
+                        placeholder={__("Type Longitude...", "open-street-map")}
+                        label=""
+                        value={from.lon}
+                        onChange={(v) => {
+                          setAttributes({
+                            map: updateData(map, parseFloat(v), "from", "lon"),
+                          });
+                        }}
+                      />
+                    </div>
                   </div>
-             </div>
-              {/* destination lat and lon */}
-             <div>
+                </div>
+                {/* destination lat and lon */}
+                <div>
                   <p className="widthChild"> Destination </p>
                   <div className="fromLatLon">
-                   <div> <NumberControl
-                      className=""
-                      placeholder={__("Type Latitude...", "open-street-map")}
-                      label=""
-                      value={destination.lat}
-                      onChange={(v) => {
-                        setAttributes({
-                          map: updateData(map, parseFloat(v), "destination","lat"),
-                        });
-                      }}
-                    /></div>
-                  
-                   <div> <NumberControl
-                      className=""
-                      placeholder={__("Type Longitude...", "open-street-map")}
-                      label=""
-                      value={destination.lon}
-                      onChange={(v) => {
-                        setAttributes({
-                          map: updateData(map, parseFloat(v), "destination","lon"),
-                        });
-                      }}
-                    /></div>
+                    <div>
+                      {" "}
+                      <NumberControl
+                        className=""
+                        placeholder={__("Type Latitude...", "open-street-map")}
+                        label=""
+                        value={destination.lat}
+                        onChange={(v) => {
+                          setAttributes({
+                            map: updateData(
+                              map,
+                              parseFloat(v),
+                              "destination",
+                              "lat"
+                            ),
+                          });
+                        }}
+                      />
+                    </div>
+
+                    <div>
+                      {" "}
+                      <NumberControl
+                        className=""
+                        placeholder={__("Type Longitude...", "open-street-map")}
+                        label=""
+                        value={destination.lon}
+                        onChange={(v) => {
+                          setAttributes({
+                            map: updateData(
+                              map,
+                              parseFloat(v),
+                              "destination",
+                              "lon"
+                            ),
+                          });
+                        }}
+                      />
+                    </div>
                   </div>
-             </div>
-             <div className="latAndLonBtn">
-                <button onClick={handleFromAndDesLatLonBtn}>Search Now</button>
+                </div>
+                <div className="latAndLonBtn">
+                  <button onClick={handleFromAndDesLatLonBtn}>
+                    Search Now
+                  </button>
+                </div>
+              </div>
             </div>
-             </div>
-            </div>
-          )}
-        </div>
-         {/* Destination toggle  */}
-         <div style={{ marginTop: "15px" }}>
-          <ToggleControl
-            checked={isDestination}
-            label="From and Destination Distance"
-            onChange={(v) =>
-              setAttributes({
-                options: updateData(options, v, "isDestination"),
-              })
-            }
-          />
-        </div>
-        {/* Routing Control toggle  */}
-        <div style={{ marginTop: "15px" }}>
-          <ToggleControl
-            checked={isRoutingControl}
-            label="Routing Control"
-            onChange={(v) =>
-              setAttributes({
-                options: updateData(options, v, "isRoutingControl"),
-              })
-            }
-          />
-          <div style={{color:"gray",marginTop:"-20px"}}>
-            {
-              !isDestination && isRoutingControl ? '' : <small >Before setting Routing Control to true, From and Destination Distance must be set to false</small>
-            }
+            )
+          }
             
-            </div>
+        </div>
+        {/* Routing System */}
+        <div style={{ marginTop:"15px" }}>
+          <p className="widthChild" style={{ marginBottom: "5px" }}>
+            Routing System
+          </p>
+          <SelectControl
+            value={routingSystem}
+            options={routingSytemOptions}
+            onChange={(v) =>
+              setAttributes({ map: updateData(map, v, "routingSystem") })
+            }
+          />
         </div>
         {/* map type */}
-        <div style={{ marginTop }}>
-          <p className="widthChild" style={{ marginBottom: "8px" }}>
-           Layer Type
+        <div style={{ marginTop:"5px" }}>
+          <p className="widthChild" style={{ marginBottom: "5px" }}>
+            Layer Type
           </p>
           <SelectControl
             value={mapLayerType}
@@ -419,17 +450,17 @@ const marginTop = isDestination && isRoutingControl
         </div>
         {/*  View self Location */}
         <div style={{ marginTop: "5px" }}>
-            <ToggleControl
-              checked={isViewMyLocation}
-              label="View My Location"
-              onChange={(v) =>
-                setAttributes({
-                  options: updateData(options, v, "isViewMyLocation"),
-                })
-              }
-            />
-          </div>
-          {/*  full screen */}
+          <ToggleControl
+            checked={isViewMyLocation}
+            label="View My Location"
+            onChange={(v) =>
+              setAttributes({
+                options: updateData(options, v, "isViewMyLocation"),
+              })
+            }
+          />
+        </div>
+        {/*  full screen */}
         <div style={{ marginTop: "15px" }}>
           <ToggleControl
             checked={isFullScreen}
@@ -469,7 +500,18 @@ const marginTop = isDestination && isRoutingControl
             }
           />
         </div>
-        
+        {/* Download PDF toggle  */}
+        <div style={{ marginTop: "15px" }}>
+          <ToggleControl
+            checked={isDownloadPDF}
+            label="Download Location of Map"
+            onChange={(v) =>
+              setAttributes({
+                options: updateData(options, v, "isDownloadPDF"),
+              })
+            }
+          />
+        </div>
       </PanelBody>
       {/* marker */}
       <PanelBody title={__("Marker", "open-street-map")} initialOpen={false}>
@@ -478,9 +520,8 @@ const marginTop = isDestination && isRoutingControl
           <div
             style={{ display: "flex", alignItems: "center", marginTop: "10px" }}
           >
-            
-           {/*  Current marker url control */}
-           <div>
+            {/*  Current marker url control */}
+            <div>
               <p className="widthChild">Current Point Location</p>
               <TextControl
                 style={{ width: "215px", marginTop: "10px" }}
@@ -488,14 +529,18 @@ const marginTop = isDestination && isRoutingControl
                 label=""
                 value={currentUrl}
                 onChange={(v) =>
-                  setAttributes({ map: updateData(map, v, "marker", "currentUrl") })
+                  setAttributes({
+                    map: updateData(map, v, "marker", "currentUrl"),
+                  })
                 }
               ></TextControl>
             </div>
             {/* self marker upload button */}
             <MediaUpload
               onSelect={(v) =>
-                setAttributes({ map: updateData(map, v.url, "marker", "currentUrl") })
+                setAttributes({
+                  map: updateData(map, v.url, "marker", "currentUrl"),
+                })
               }
               render={({ open }) => (
                 <Button
@@ -509,7 +554,6 @@ const marginTop = isDestination && isRoutingControl
           <div
             style={{ display: "flex", alignItems: "center", marginTop: "10px" }}
           >
-            
             {/*  self marker url control */}
             <div>
               <p className="widthChild">Start Point Location</p>
@@ -519,14 +563,18 @@ const marginTop = isDestination && isRoutingControl
                 label=""
                 value={fromUrl}
                 onChange={(v) =>
-                  setAttributes({ map: updateData(map, v, "marker", "fromUrl") })
+                  setAttributes({
+                    map: updateData(map, v, "marker", "fromUrl"),
+                  })
                 }
               ></TextControl>
             </div>
             {/* self marker upload button */}
             <MediaUpload
               onSelect={(v) =>
-                setAttributes({ map: updateData(map, v.url, "marker", "fromUrl") })
+                setAttributes({
+                  map: updateData(map, v.url, "marker", "fromUrl"),
+                })
               }
               render={({ open }) => (
                 <Button
@@ -537,7 +585,6 @@ const marginTop = isDestination && isRoutingControl
               )}
             ></MediaUpload>
           </div>
-          
         </div>
         {/* Upload others/end point marker */}
         <div>

@@ -57,7 +57,8 @@
               "lon": 0,
               "locationName": ""
             }
-        }
+        },
+        "routingSystem":"none"
       }
     },
     "options": {
@@ -65,11 +66,10 @@
       "default": {
         "scrollZoom": true,
         "isViewLatLon": true,
-        "isRoutingControl": false,
         "isMapLayer": true,
         "isFullScreen": true,
+        "isDownloadPDF": false,
         "isViewMyLocation": true,
-        "isDestination": false,
         "mapLayerType": "default",
         "selectMarker": "start"
       }
