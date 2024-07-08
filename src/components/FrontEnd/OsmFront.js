@@ -12,94 +12,137 @@ import "leaflet-control-geocoder";
 import { MapContainer, Marker, Popup, TileLayer, useMap } from "react-leaflet";
 import useDeviceWidth from "../hooks/useDeviceWidth";
 
-// set location direction
+// set froma nd des location
 function ResetCenterView(props) {
-  const { selectPosition, isViewLatLon } = props;
-  const map = useMap();
+  const { selectPosition, selectFromPosition, selectDestinationPosition, isViewLatLon, selfMarkerColumns, othersMarkerColumns, pathMarkerColumns, device, marker } = props;
 
-  // const { myLocation } = routeDirection;
-  // const routeControlRef = useRef(null);
-  // const waypoints = [
-  //       {
-  //         latLng: L.latLng(myLocation.lat, myLocation.lon),
-  //         name: myLocation.locationName
-  //       },
-  //       {
-  //         latLng: L.latLng(selectPosition.lat, selectPosition.lon),
-  //         name: selectPosition.display_name
-  //       }
-  //     ];
+  const map = useMap();
+  const routeControlRef = useRef(null);
 
   useEffect(() => {
     if (selectPosition) {
+      console.log('Setting view to:', selectPosition);
       map.setView(
-        L.latLng(selectPosition?.lat, selectPosition?.lon),
+        L.latLng(selectPosition.lat, selectPosition.lon),
         map.getZoom(),
-        {
-          animate: true,
-        }
+        { animate: true }
       );
     }
-    // show lat and lon when click in the map start
+
     if (isViewLatLon) {
-      map.on("click", (e) => {
+      const handleClick = (e) => {
         L.popup()
           .setLatLng(e.latlng)
           .setContent("You clicked the map at " + e.latlng.toString())
           .openOn(map);
-      });
+      };
+      map.on("click", handleClick);
+
+      return () => {
+        map.off("click", handleClick);
+      };
+    }
+  }, [selectPosition, isViewLatLon, map]);
+
+  useEffect(() => {
+    if (selectFromPosition && selectDestinationPosition) {
+      const waypoints = [
+        {
+          latLng: L.latLng(selectFromPosition.lat, selectFromPosition.lon),
+          name: selectFromPosition.locationName,
+        },
+        {
+          latLng: L.latLng(selectDestinationPosition.lat, selectDestinationPosition.lon),
+          name: selectDestinationPosition.display_name,
+        },
+      ];
+
+      console.log('Creating routing control with waypoints:', waypoints);
+
+      if (routeControlRef.current) {
+        console.log('Removing existing routing control');
+        map.removeControl(routeControlRef.current);
+        routeControlRef.current = null;
+      }
+
+      routeControlRef.current = L.Routing.control({
+        waypoints,
+        position: 'topleft',
+        createMarker: (i, waypoint, n) => {
+          let markerOptions = {};
+
+          if (i === 0) {
+            if (!marker.fromUrl) {
+              console.error('Start marker URL is not defined');
+            } else {
+              markerOptions.icon = L.icon({
+                iconUrl: marker.fromUrl,
+                iconSize: [
+                  selfMarkerColumns.width[device],
+                  selfMarkerColumns.height[device],
+                ],
+                iconAnchor: [12, 41],
+                popupAnchor: [1, -34],
+                shadowSize: [41, 41],
+              });
+            }
+          } else if (i === n - 1) {
+            if (!marker.toUrl) {
+              console.error('End marker URL is not defined');
+            } else {
+              markerOptions.icon = L.icon({
+                iconUrl: marker.toUrl,
+                iconSize: [
+                  othersMarkerColumns.width[device],
+                  othersMarkerColumns.height[device],
+                ],
+                iconAnchor: [12, 41],
+                popupAnchor: [1, -34],
+                shadowSize: [41, 41],
+              });
+            }
+          } else {
+            if (!marker.pathUrl) {
+              console.error('Intermediate marker URL is not defined');
+            } else {
+              markerOptions.icon = L.icon({
+                iconUrl: marker.pathUrl,
+                iconSize: [
+                  pathMarkerColumns.width[device],
+                  pathMarkerColumns.height[device],
+                ],
+                iconAnchor: [12, 41],
+                popupAnchor: [1, -34],
+                shadowSize: [41, 41],
+              });
+            }
+          }
+
+          if (markerOptions.icon) {
+            return L.marker(waypoint.latLng, markerOptions);
+          }
+          return L.marker(waypoint.latLng);
+        },
+      }).addTo(map);
     }
 
-    // Set Routing Control start
-    // if(routeControlRef.current) {
-    //   map.removeControl(routeControlRef.current);
-    //   routeControlRef.current = null;
-    // }
-
-    //  routeControlRef.current = L.Routing.control({
-    //     waypoints,
-    //     createMarker: (i, waypoint, n) => {
-    //       let markerOptions = {};
-    //       if (i === 0) {
-    //         // Custom icon for the start point
-    //         markerOptions.icon = L.icon({
-    //           iconUrl: marker.url,
-    //           iconSize: [selfMarkerColumns.width[device], selfMarkerColumns.height[device]],
-    //           iconAnchor: [12, 41],
-    //           popupAnchor: [1, -34],
-    //           shadowSize: [41, 41]
-    //         });
-    //       } else if (i === n - 1) {
-    //         // Custom icon for the end point
-    //         markerOptions.icon = L.icon({
-    //           iconUrl: marker.toUrl,
-    //           iconSize: [othersMarkerColumns.width[device], othersMarkerColumns.height[device]],
-    //           iconAnchor: [12, 41],
-    //           popupAnchor: [1, -34],
-    //           shadowSize: [41, 41]
-    //         });
-    //       } else {
-    //         // Custom icon for the intermediate points
-    //         markerOptions.icon = L.icon({
-    //           iconUrl: marker.pathUrl,
-    //           iconSize: [pathMarkerColumns.width[device], pathMarkerColumns.height[device]],
-    //           iconAnchor: [12, 41],
-    //           popupAnchor: [1, -34],
-    //           shadowSize: [41, 41]
-    //         });
-    //       }
-    //       return L.marker(waypoint.latLng, markerOptions);
-    //     }
-    //   }).addTo(map);
-
-    //   return () => {
-    //     if(routeControlRef.current) {
-    //       map.removeControl(routeControlRef.current);
-    //       routeControlRef.current = null;
-    //     }
-    //  };
-    // Set Routing Control end
-  }, [selectPosition, isViewLatLon, map]);
+    return () => {
+      if (routeControlRef.current) {
+        console.log('Cleaning up routing control');
+        map.removeControl(routeControlRef.current);
+        routeControlRef.current = null;
+      }
+    };
+  }, [
+    selectFromPosition,
+    selectDestinationPosition,
+    selfMarkerColumns,
+    othersMarkerColumns,
+    pathMarkerColumns,
+    device,
+    marker,
+    map,
+  ]);
 
   return null;
 }
@@ -144,7 +187,7 @@ const MapViewSwitch = ({ layer, setLayer }) => {
 
 const OsmFront = ({ attributes }) => {
   const { cId, map, options, layout, style } = attributes;
-  const { selectPosition, marker, routeDirection,searchQuery } = map;
+  const { selectPosition, marker,selectFromPosition,selectDestinationPosition, routeDirection,searchQuery } = map;
   const { fromLocation, toLocation } = routeDirection;
   const {
     isMapLayer,
@@ -154,6 +197,7 @@ const OsmFront = ({ attributes }) => {
     isFullScreen,
     isViewMyLocation,
     isViewLatLon,
+    isDestination
   } = options;
   const {
     markerColumns,
@@ -368,12 +412,19 @@ const OsmFront = ({ attributes }) => {
             </Marker>
 
             {/* Destination */}
-            {isRoutingControl && <RoutingControl />}
+            {isRoutingControl && !isDestination && <RoutingControl/>}
 
             {/* resetCenterView */}
             <ResetCenterView
               selectPosition={selectPosition}
+              selectFromPosition={selectFromPosition}
+              selectDestinationPosition={selectDestinationPosition}
               isViewLatLon={isViewLatLon}
+              selfMarkerColumns={selfMarkerColumns}
+              othersMarkerColumns={othersMarkerColumns}
+              pathMarkerColumns={pathMarkerColumns}
+              device={device}
+              marker={marker}
             />
 
             {/* self location by map button */}

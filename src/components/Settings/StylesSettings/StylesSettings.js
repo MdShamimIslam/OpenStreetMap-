@@ -11,6 +11,7 @@ import {
   BorderControl,
   ColorsControl,
   Typography,
+  BColor,
 } from "../../../../../Components";
 import { Tab } from "bpl-gutenberg-panel";
 import { produce } from "immer";
@@ -18,10 +19,15 @@ import { produce } from "immer";
 const StylesSettings = ({ attributes, setAttributes, device }) => {
   const { layout, options, style } = attributes;
   const { selectMarker } = options;
-  const { tooltipColors, tooltipTypo, border } = style;
+  const { tooltipColors, tooltipTypo, border, tipColor } = style;
   const { width, height } = layout.mapColumns;
-  const { markerColumns,selfMarkerColumns, othersMarkerColumns, pathMarkerColumns } = layout;
-  console.log(tooltipTypo);
+  const {
+    markerColumns,
+    selfMarkerColumns,
+    othersMarkerColumns,
+    pathMarkerColumns,
+  } = layout;
+  
   return (
     <div>
       {/* map */}
@@ -40,15 +46,32 @@ const StylesSettings = ({ attributes, setAttributes, device }) => {
             defaults={{ color: "white", bg: "#4527a4" }}
           />
         </div>
+        {/* caret color */}
+        <div className="customWidth">
+          <p className="widthChild">Caret Background</p>
+          <BColor
+            label=""
+            value={tipColor}
+            onChange={(val) =>
+              setAttributes({ style: updateData(style, val, "tipColor") })
+            }
+            defaults={{ color: "#4527a4" }}
+          />
+         
+        </div>
         {/* typography */}
         <div className="customWidth">
           <p className="widthChild">Tooltip Typography</p>
           <Typography
             label=""
             value={tooltipTypo}
-            onChange={(v) => setAttributes({style:produce(style,draft=>{
-              draft.tooltipTypo=v
-            })})  }
+            onChange={(v) =>
+              setAttributes({
+                style: produce(style, (draft) => {
+                  draft.tooltipTypo = v;
+                }),
+              })
+            }
             defaults={{ fontSize: 13 }}
           />
         </div>
@@ -121,13 +144,7 @@ const StylesSettings = ({ attributes, setAttributes, device }) => {
             value={markerColumns.width[device]}
             onChange={(v) =>
               setAttributes({
-                layout: updateData(
-                  layout,
-                  v,
-                  "markerColumns",
-                  "width",
-                  device
-                ),
+                layout: updateData(layout, v, "markerColumns", "width", device),
               })
             }
             min={1}

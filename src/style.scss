@@ -1,13 +1,17 @@
-// leaflet custom style start
-// .leaflet-popup-content-wrapper{
-// 	background: #1c858c !important;
-// }
-// .leaflet-popup-content{
-// 	color: red;
-// }
-// leaflet custom style end
 
-// Leaflet Control Container Style
+// from and Destination contentSettings Style start
+.fromLatLon{
+	display: flex;
+	align-items: center;
+	gap:5px;
+	margin-top: 8px;;
+}
+
+
+// from and Destination contentSettings Style end
+
+
+// Leaflet Control Container Style start
 .leaflet-top.leaftlet-left {
   display: flex;
   flex-direction: column;
@@ -29,12 +33,15 @@
     margin-left: -2px;
 	cursor: pointer;
 }
+
+// Leaflet Control Container Style end
+
 // Block heading style start
-.wp-block.wp-block-post-title.block-editor-block-list__block.editor-post-title.editor-post-title__input.rich-text {
-  text-align: center;
-  font-size: 26px;
-  color: #0dae43;
-}
+// .wp-block.wp-block-post-title.block-editor-block-list__block.editor-post-title.editor-post-title__input.rich-text {
+//   text-align: center;
+//   font-size: 26px;
+//   color: #0dae43;
+// }
 // Block heading style end
 
 // search control button and input field start
@@ -130,7 +137,7 @@
   cursor: pointer;
 }
 .listPlace:hover {
-  background: #4527a4;
+  background: #5c556f;
   color: white;
   padding: 5px;
   border-radius: 5px;

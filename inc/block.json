@@ -34,10 +34,18 @@
           "pathUrl": "https://png.pngtree.com/png-clipart/20230123/original/pngtree-flat-red-location-sign-png-image_8927579.png"
         },
         "listPlace": [],
+        "fromListPlace": [],
+        "desListPlace": [],
         "selectPosition": "",
+        "selectFromPosition": "",
+        "selectDestinationPosition": "",
         "searchQuery": "",
+        "fromSearchQuery": "",
+        "DesSearchQuery": "",
         "latitude": "",
         "longitude": "",
+        "from":{"lat":"","lon":""},
+        "destination":{"lat":"","lon":""},
         "routeDirection": {
             "fromLocation": {
               "lat": 0,
@@ -45,18 +53,6 @@
               "locationName": ""
             },
             "toLocation": {
-              "lat": 0,
-              "lon": 0,
-              "locationName": ""
-            }
-        },
-        "fromAndDestination": {
-            "fromLocation": {
-              "lat": 0,
-              "lon": 0,
-              "locationName": ""
-            },
-            "destinationLocation": {
               "lat": 0,
               "lon": 0,
               "locationName": ""
@@ -107,6 +103,7 @@
       "type": "object",
       "default": {
         "tooltipColors": { "color": "white", "bg": "#4527a4" },
+        "tipColor": "#4527a4",
         "tooltipTypo": { "fontSize": 13 },
         "border": {},
         "zoom": 8

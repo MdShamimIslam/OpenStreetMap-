@@ -4,10 +4,11 @@ import { getBorderCSS,getColorsCSS, getTypoCSS} from '../../../../Components/uti
 const Style = ({ attributes }) => {
   const { cId, layout, style } = attributes;
   const { width, height } = layout.mapColumns;
-  const { tooltipColors,border,tooltipTypo } = style;
+  const { tooltipColors,border,tooltipTypo,tipColor } = style;
   const mainWrapper = `#osmHelloBlock-${cId}`;
   const mapWrapper = `${mainWrapper} .maps .mapContainer`;
   const leafletWrapper = `${mainWrapper} .leaflet-popup-content-wrapper`;
+  const caret = `${mainWrapper} .leaflet-popup-tip-container .leaflet-popup-tip`;
   return (
     <style>
 
@@ -23,6 +24,10 @@ const Style = ({ attributes }) => {
         ${leafletWrapper}{
         ${getColorsCSS(tooltipColors)};
         font-size : ${tooltipTypo.desktop};
+        }
+
+        ${caret}{
+          background : ${tipColor}
         }
        
 

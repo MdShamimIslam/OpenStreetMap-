@@ -19,10 +19,18 @@ const ContentSettings = ({
   searchText,
   setSearchText,
   handleSearch,
+  handleFromSearch,
+  handleDesSearch,
   handleInputChange,
+  fromSearchText,
+  setFromSearchText,
+  handleFromInputChange,
+  desSearchText,
+  setDesSearchText,
+  handleDesInputChange
 }) => {
   const { map, options, style } = attributes;
-  const { marker, listPlace, latitude, longitude } = map;
+  const { marker, listPlace,fromListPlace,desListPlace, latitude, longitude,from,destination } = map;
   const { currentUrl,fromUrl, toUrl, pathUrl } = marker;
   const {
     scrollZoom,
@@ -34,6 +42,12 @@ const ContentSettings = ({
     isDestination,
     isRoutingControl
   } = options;
+    
+  // Function calling both search handlers
+  const handleFromAndDesBtn = ()=>{
+    handleFromSearch(fromSearchText);
+    handleDesSearch(desSearchText);
+  };
 
   // set lat and lon in selectionPosition attributes
   const handleLatAndLonBtn = () => {
@@ -50,10 +64,39 @@ const ContentSettings = ({
       setSearchText("");
     }
   };
-  // handle from and Destination function
-  const handleFromAndDesBtn = ()=>{
-    
+
+// handle from and des latlon btn
+const handleFromAndDesLatLonBtn = ()=>{
+  if((from.lat && from.lon) && (destination.lat && destination.lon)){
+    setAttributes({
+      map: produce(map, (draft) => {
+        draft.selectFromPosition = {
+          lat: parseFloat(from.lat),
+          lon: parseFloat(from.lon),
+        };
+        draft.selectDestinationPosition = {
+          lat: parseFloat(destination.lat),
+          lon: parseFloat(destination.lon),
+        };
+        draft.fromListPlace = [];
+        draft.desListPlace = [];
+      }),
+    });
+    setFromSearchText("");
+    setDesSearchText("");
+
   }
+}
+// custom style for margin-top
+const marginTop = isDestination && isRoutingControl
+    ? "15px"
+    : !isDestination && !isRoutingControl
+    ? "10px"
+    : isDestination && !isRoutingControl
+    ? "10px"
+    : !isDestination && isRoutingControl
+    ? "35px"
+    : "10px";
 
   return (
     <>
@@ -83,7 +126,7 @@ const ContentSettings = ({
                     {searchIcon}
                   </button>
                 </div>
-                {/* show location */}
+                {/* show search location */}
                 <div className="location">
                   {listPlace.length > 0 &&
                     listPlace.map((item) => (
@@ -104,7 +147,7 @@ const ContentSettings = ({
                         className="listPlace"
                       >
                         <img
-                          style={{ width: "20px", height: "25px" }}
+                          style={{ width: "15px", height: "20px" }}
                           src={marker.toUrl}
                           alt="placeholder"
                         />
@@ -159,30 +202,163 @@ const ContentSettings = ({
         <div>
           {isDestination && (
             <div>
-              <div className="fInput">
-                <p className="widthChild">From</p>
-                <input
-                  value={""}
-                  onChange={(e) => console.log(e.target.value)}
-                  type="text"
-                  placeholder="Type From Location..."
-                  className="fromInput"
-                />
-              </div>
-              <div className="fInput">
-                <p className="widthChild">Destination</p>
-                <input
-                  value={""}
-                  onChange={(e) => console.log(e.target.value)}
-                  type="text"
-                  placeholder="Type Destination Location..."
-                  className="fromInput"
-                />
-              </div>
-              <div className="desBtn">
-                <button onClick={handleFromAndDesBtn}>Search Here</button>
-              </div>
-              <small style={{color:"gray"}}>It is still in progress...</small>
+              {/* Query Search */}
+             <div>
+              {/* from start */}
+                <div className="fInput">
+                    <p className="widthChild">From</p>
+                    <input
+                      value={fromSearchText}
+                      onChange={(e) => handleFromInputChange(e.target.value)}
+                      type="text"
+                      placeholder="Type From Location..."
+                      className="fromInput"
+                    />
+                  </div>
+                  {/* show from search location */}
+                <div className="location">
+                  {fromListPlace.length > 0 &&
+                    fromListPlace.map((item) => (
+                      <div
+                        onClick={() => {
+                          setAttributes({
+                            map: produce(map, (draft) => {
+                              draft.selectFromPosition = item;
+                              draft.fromSearchQuery = item.display_name;
+                              draft.fromListPlace = [];
+                              draft.from.lat = "";
+                              draft.from.lon = "";
+                            }),
+                          });
+                          setFromSearchText(item.display_name);
+                        }}
+                        key={item.place_id}
+                        className="listPlace"
+                      >
+                        <img
+                          style={{ width: "15px", height: "20px" }}
+                          src={marker.fromUrl}
+                          alt="placeholder"
+                        />
+                        <p className="placeDisName">{item.display_name}</p>
+                      </div>
+                    ))}
+                </div>
+              {/* from end */}
+
+                {/* destination start */}
+                  <div className="fInput">
+                    <p className="widthChild">Destination</p>
+                    <input
+                      value={desSearchText}
+                      onChange={(e) => handleDesInputChange(e.target.value)}
+                      type="text"
+                      placeholder="Type Destination Location..."
+                      className="fromInput"
+                    />
+                  </div>
+                   {/* show destination search location */}
+                <div className="location">
+                  {desListPlace.length > 0 &&
+                    desListPlace.map((item) => (
+                      <div
+                        onClick={() => {
+                          setAttributes({
+                            map: produce(map, (draft) => {
+                              draft.selectDestinationPosition = item;
+                              draft.DesSearchQuery = item.display_name;
+                              draft.desListPlace = [];
+                              draft.destination.lat = "";
+                              draft.destination.lon = "";
+                            }),
+                          });
+                          setDesSearchText(item.display_name);
+                        }}
+                        key={item.place_id}
+                        className="listPlace"
+                      >
+                        <img
+                          style={{ width: "15px", height: "20px" }}
+                          src={marker.toUrl}
+                          alt="placeholder"
+                        />
+                        <p className="placeDisName">{item.display_name}</p>
+                      </div>
+                    ))}
+                </div>
+              {/* destination end */}
+
+              {/* From and des button handle */}
+                  <div className="desBtn">
+                    <button onClick={()=>handleFromAndDesBtn()}>Search Here</button>
+                  </div>
+                  <small style={{color:"gray"}}>It is still in progress...</small>
+             </div>
+             <p style={{ textAlign: "center" }} className="widthChild"> OR </p>
+             {/* Lat-lon Search */}
+             <div>
+              {/* from lat and lon */}
+             <div>
+                  <p className="widthChild"> From </p>
+                  <div className="fromLatLon">
+                   <div> <NumberControl
+                      className=""
+                      placeholder={__("Type Latitude...", "open-street-map")}
+                      label=""
+                      value={from.lat}
+                      onChange={(v) =>
+                        setAttributes({
+                          map: updateData(map, parseFloat(v), "from","lat"),
+                        })
+                      }
+                    /></div>
+                  
+                   <div> <NumberControl
+                      className=""
+                      placeholder={__("Type Longitude...", "open-street-map")}
+                      label=""
+                      value={from.lon}
+                      onChange={(v) => {
+                        setAttributes({
+                          map: updateData(map, parseFloat(v), "from","lon"),
+                        });
+                      }}
+                    /></div>
+                  </div>
+             </div>
+              {/* destination lat and lon */}
+             <div>
+                  <p className="widthChild"> Destination </p>
+                  <div className="fromLatLon">
+                   <div> <NumberControl
+                      className=""
+                      placeholder={__("Type Latitude...", "open-street-map")}
+                      label=""
+                      value={destination.lat}
+                      onChange={(v) => {
+                        setAttributes({
+                          map: updateData(map, parseFloat(v), "destination","lat"),
+                        });
+                      }}
+                    /></div>
+                  
+                   <div> <NumberControl
+                      className=""
+                      placeholder={__("Type Longitude...", "open-street-map")}
+                      label=""
+                      value={destination.lon}
+                      onChange={(v) => {
+                        setAttributes({
+                          map: updateData(map, parseFloat(v), "destination","lon"),
+                        });
+                      }}
+                    /></div>
+                  </div>
+             </div>
+             <div className="latAndLonBtn">
+                <button onClick={handleFromAndDesLatLonBtn}>Search Now</button>
+            </div>
+             </div>
             </div>
           )}
         </div>
@@ -209,9 +385,15 @@ const ContentSettings = ({
               })
             }
           />
+          <div style={{color:"gray",marginTop:"-20px"}}>
+            {
+              !isDestination && isRoutingControl ? '' : <small >Before setting Routing Control to true, From and Destination Distance must be set to false</small>
+            }
+            
+            </div>
         </div>
         {/* map type */}
-        <div style={{ marginTop: "15px" }}>
+        <div style={{ marginTop }}>
           <p className="widthChild" style={{ marginBottom: "8px" }}>
            Layer Type
           </p>
