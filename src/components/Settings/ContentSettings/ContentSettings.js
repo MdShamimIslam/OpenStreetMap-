@@ -52,6 +52,7 @@ const ContentSettings = ({
     isDownloadPDF,
   } = options;
 
+
   // Function calling both(from and des) search handlers
   const handleFromAndDesBtn = async () => {
     const fromInfo = await handleFromSearch(fromSearchText);
@@ -85,6 +86,7 @@ const ContentSettings = ({
             lon: parseFloat(longitude),
           };
           draft.listPlace = [];
+          draft.searchQuery ="";
         }),
       });
       setSearchText("");
@@ -106,12 +108,16 @@ const ContentSettings = ({
           };
           draft.fromListPlace = [];
           draft.desListPlace = [];
+          draft.fromSearchQuery = "";
+          draft.DesSearchQuery = "";
         }),
       });
       setFromSearchText("");
       setDesSearchText("");
     }
   };
+
+  
   return (
     <>
       {/* map */}

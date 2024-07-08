@@ -19,6 +19,7 @@
   "license": "ISC",
   "dependencies": {
     "bpl-gutenberg-panel": "^0.0.42",
+    "html-to-image": "^1.11.11",
     "html2canvas": "^1.4.1",
     "immer": "^10.1.1",
     "jspdf": "^2.5.1",
@@ -29,7 +30,8 @@
     "leaflet.locatecontrol": "^0.81.1",
     "lodash": "^4.17.21",
     "react-icons": "^4.12.0",
-    "react-leaflet": "^4.2.1"
+    "react-leaflet": "^4.2.1",
+    "react-leaflet-easyprint": "^2.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.23.7",

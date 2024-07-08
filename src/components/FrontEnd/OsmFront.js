@@ -14,14 +14,25 @@ import useDeviceWidth from "../hooks/useDeviceWidth";
 
 // set froma nd des location
 function ResetCenterView(props) {
-  const { selectPosition, selectFromPosition, selectDestinationPosition, isViewLatLon, selfMarkerColumns, othersMarkerColumns, pathMarkerColumns, device, marker,routingSystem} = props;
+  const {
+    selectPosition,
+    selectFromPosition,
+    selectDestinationPosition,
+    isViewLatLon,
+    selfMarkerColumns,
+    othersMarkerColumns,
+    pathMarkerColumns,
+    device,
+    marker,
+    routingSystem,fromLocation
+  } = props;
 
   const map = useMap();
   const routeControlRef = useRef(null);
 
   useEffect(() => {
     if (selectPosition) {
-      console.log('Setting view to:', selectPosition);
+      console.log("Setting view to:", selectPosition);
       map.setView(
         L.latLng(selectPosition.lat, selectPosition.lon),
         map.getZoom(),
@@ -45,91 +56,95 @@ function ResetCenterView(props) {
   }, [selectPosition, isViewLatLon, map]);
 
   useEffect(() => {
-    if (routingSystem === 'distance' && selectFromPosition && selectDestinationPosition) {
+    if (
+      routingSystem === "distance" &&
+      selectFromPosition &&
+      selectDestinationPosition
+    ) {
       const waypoints = [
         {
-          latLng: L.latLng(selectFromPosition.lat, selectFromPosition.lon),
+          latLng: L.latLng(fromLocation.lat || selectFromPosition.lat, fromLocation.lon || selectFromPosition.lon),
           name: selectFromPosition.locationName,
         },
         {
-          latLng: L.latLng(selectDestinationPosition.lat, selectDestinationPosition.lon),
+          latLng: L.latLng(
+            selectDestinationPosition.lat,
+            selectDestinationPosition.lon
+          ),
           name: selectDestinationPosition.display_name,
         },
       ];
 
       if (routeControlRef.current) {
-        console.log('Removing existing routing control');
+        console.log("Removing existing routing control");
         map.removeControl(routeControlRef.current);
         routeControlRef.current = null;
       }
-       
-      routeControlRef.current = L.Routing.control({
-          waypoints,
-          position: 'topright',
-          createMarker: (i, waypoint, n) => {
-            let markerOptions = {};
-  
-            if (i === 0) {
-              if (!marker.fromUrl) {
-                console.error('Start marker URL is not defined');
-              } else {
-                markerOptions.icon = L.icon({
-                  iconUrl: marker.fromUrl,
-                  iconSize: [
-                    selfMarkerColumns.width[device],
-                    selfMarkerColumns.height[device],
-                  ],
-                  iconAnchor: [12, 41],
-                  popupAnchor: [1, -34],
-                  shadowSize: [41, 41],
-                });
-              }
-            } else if (i === n - 1) {
-              if (!marker.toUrl) {
-                console.error('End marker URL is not defined');
-              } else {
-                markerOptions.icon = L.icon({
-                  iconUrl: marker.toUrl,
-                  iconSize: [
-                    othersMarkerColumns.width[device],
-                    othersMarkerColumns.height[device],
-                  ],
-                  iconAnchor: [12, 41],
-                  popupAnchor: [1, -34],
-                  shadowSize: [41, 41],
-                });
-              }
-            } else {
-              if (!marker.pathUrl) {
-                console.error('Intermediate marker URL is not defined');
-              } else {
-                markerOptions.icon = L.icon({
-                  iconUrl: marker.pathUrl,
-                  iconSize: [
-                    pathMarkerColumns.width[device],
-                    pathMarkerColumns.height[device],
-                  ],
-                  iconAnchor: [12, 41],
-                  popupAnchor: [1, -34],
-                  shadowSize: [41, 41],
-                });
-              }
-            }
-  
-            if (markerOptions.icon) {
-              return L.marker(waypoint.latLng, markerOptions);
-            }
-            return L.marker(waypoint.latLng);
-          },
-        }).addTo(map);
-      
 
-      
+      routeControlRef.current = L.Routing.control({
+        waypoints,
+        position: "topright",
+        createMarker: (i, waypoint, n) => {
+          let markerOptions = {};
+
+          if (i === 0) {
+            if (!marker.fromUrl) {
+              console.error("Start marker URL is not defined");
+            } else {
+              markerOptions.icon = L.icon({
+                iconUrl: marker.fromUrl,
+                iconSize: [
+                  selfMarkerColumns.width[device],
+                  selfMarkerColumns.height[device],
+                ],
+                iconAnchor: [12, 41],
+                popupAnchor: [1, -34],
+                shadowSize: [41, 41],
+              });
+            }
+          } else if (i === n - 1) {
+            if (!marker.toUrl) {
+              console.error("End marker URL is not defined");
+            } else {
+              markerOptions.icon = L.icon({
+                iconUrl: marker.toUrl,
+                iconSize: [
+                  othersMarkerColumns.width[device],
+                  othersMarkerColumns.height[device],
+                ],
+                iconAnchor: [12, 41],
+                popupAnchor: [1, -34],
+                shadowSize: [41, 41],
+              });
+            }
+          } else {
+            if (!marker.pathUrl) {
+              console.error("Intermediate marker URL is not defined");
+            } else {
+              markerOptions.icon = L.icon({
+                iconUrl: marker.pathUrl,
+                iconSize: [
+                  pathMarkerColumns.width[device],
+                  pathMarkerColumns.height[device],
+                ],
+                iconAnchor: [12, 41],
+                popupAnchor: [1, -34],
+                shadowSize: [41, 41],
+              });
+            }
+          }
+
+          if (markerOptions.icon) {
+            return L.marker(waypoint.latLng, markerOptions);
+          }
+          return L.marker(waypoint.latLng);
+        },
+      }).addTo(map);
     }
 
     return () => {
       if (routeControlRef.current) {
-        console.log('Cleaning up routing control');
+        console.log("Cleaning up routing control");
         map.removeControl(routeControlRef.current);
         routeControlRef.current = null;
       }
@@ -142,7 +157,8 @@ function ResetCenterView(props) {
     pathMarkerColumns,
     device,
     marker,
-    map,routingSystem
+    map,
+    routingSystem,fromLocation
   ]);
 
   return null;
@@ -188,7 +204,15 @@ const MapViewSwitch = ({ layer, setLayer }) => {
 
 const OsmFront = ({ attributes }) => {
   const { cId, map, options, layout, style } = attributes;
-  const { selectPosition, marker,selectFromPosition,selectDestinationPosition, routeDirection,searchQuery,routingSystem } = map;
+  const {
+    selectPosition,
+    marker,
+    selectFromPosition,
+    selectDestinationPosition,
+    routeDirection,
+    searchQuery,
+    routingSystem,
+  } = map;
   const { fromLocation, toLocation } = routeDirection;
   const {
     isMapLayer,
@@ -196,7 +220,7 @@ const OsmFront = ({ attributes }) => {
     mapLayerType,
     isFullScreen,
     isViewMyLocation,
-    isViewLatLon
+    isViewLatLon,
   } = options;
   const {
     markerColumns,
@@ -227,14 +251,7 @@ const OsmFront = ({ attributes }) => {
   // for scrollWheelZoom etc...
   useEffect(() => {
     setMapKey((prevKey) => prevKey + 1);
-  }, [
-    scrollZoom,
-    marker,
-    isViewMyLocation,
-    isMapLayer,
-    style,
-    isViewLatLon,
-  ]);
+  }, [scrollZoom, marker, isViewMyLocation, isMapLayer, style, isViewLatLon]);
 
   // from and destination distance
   const RoutingControl = () => {
@@ -405,13 +422,11 @@ const OsmFront = ({ attributes }) => {
             )}
 
             <Marker position={locationSelection} icon={icon}>
-              <Popup>
-              {searchQuery ? searchQuery : 'Rangpur'}
-              </Popup>
+              <Popup>{searchQuery ? searchQuery : "Rangpur"}</Popup>
             </Marker>
 
             {/* Destination */}
-            { routingSystem === 'routingControl' && <RoutingControl/>}
+            {routingSystem === "routingControl" && <RoutingControl />}
 
             {/* resetCenterView */}
             <ResetCenterView
@@ -425,6 +440,7 @@ const OsmFront = ({ attributes }) => {
               device={device}
               marker={marker}
               routingSystem={routingSystem}
+              fromLocation={fromLocation}
             />
 
             {/* self location by map button */}
@@ -439,7 +455,6 @@ const OsmFront = ({ attributes }) => {
                 <MapViewSwitch layer={layer} setLayer={setLayer} />
               )}
             </div>
-            
           </MapContainer>
         </div>
       </div>

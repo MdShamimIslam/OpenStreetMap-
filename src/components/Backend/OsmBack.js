@@ -1,5 +1,3 @@
-import React, { useEffect, useRef, useState } from "react";
-import Style from "../Style/Style";
 import { produce } from "immer";
 import L from "leaflet";
 import "leaflet-control-geocoder";
@@ -10,13 +8,24 @@ import "leaflet-routing-machine/dist/leaflet-routing-machine.css";
 import "leaflet.locatecontrol";
 import "leaflet.locatecontrol/dist/L.Control.Locate.min.css";
 import "leaflet/dist/leaflet.css";
+import React, { useEffect, useRef, useState } from "react";
 import { MapContainer, Marker, Popup, TileLayer, useMap } from "react-leaflet";
-import html2canvas from 'html2canvas';
-import jsPDF from 'jspdf';
+import Style from "../Style/Style";
 
 // set froma nd des location
 function ResetCenterView(props) {
-  const { selectPosition, selectFromPosition, selectDestinationPosition, isViewLatLon, selfMarkerColumns, othersMarkerColumns, pathMarkerColumns, device, marker,routingSystem } = props;
+  const {
+    selectPosition,
+    selectFromPosition,
+    selectDestinationPosition,
+    isViewLatLon,
+    selfMarkerColumns,
+    othersMarkerColumns,
+    pathMarkerColumns,
+    device,
+    marker,
+    routingSystem,fromLocation
+  } = props;
 
   const map = useMap();
   const routeControlRef = useRef(null);
@@ -46,35 +55,40 @@ function ResetCenterView(props) {
   }, [selectPosition, isViewLatLon, map]);
 
   useEffect(() => {
-    if ( routingSystem === 'distance' && selectFromPosition && selectDestinationPosition) {
+    if (
+      routingSystem === "distance" &&
+      selectFromPosition &&
+      selectDestinationPosition
+    ) {
       const waypoints = [
         {
-          latLng: L.latLng(selectFromPosition.lat, selectFromPosition.lon),
+          latLng: L.latLng(fromLocation.lat || selectFromPosition.lat, fromLocation.lon || selectFromPosition.lon),
           name: selectFromPosition.locationName,
         },
         {
-          latLng: L.latLng(selectDestinationPosition.lat, selectDestinationPosition.lon),
+          latLng: L.latLng(
+            selectDestinationPosition.lat,
+            selectDestinationPosition.lon
+          ),
           name: selectDestinationPosition.display_name,
         },
       ];
 
-      console.log('Creating routing control with waypoints:', waypoints);
-
       if (routeControlRef.current) {
-        console.log('Removing existing routing control');
+        console.log("Removing existing routing control");
         map.removeControl(routeControlRef.current);
         routeControlRef.current = null;
       }
 
       routeControlRef.current = L.Routing.control({
         waypoints,
-        position: 'topright',
+        position: "topright",
         createMarker: (i, waypoint, n) => {
           let markerOptions = {};
 
           if (i === 0) {
             if (!marker.fromUrl) {
-              console.error('Start marker URL is not defined');
+              console.error("Start marker URL is not defined");
             } else {
               markerOptions.icon = L.icon({
                 iconUrl: marker.fromUrl,
@@ -89,7 +103,7 @@ function ResetCenterView(props) {
             }
           } else if (i === n - 1) {
             if (!marker.toUrl) {
-              console.error('End marker URL is not defined');
+              console.error("End marker URL is not defined");
             } else {
               markerOptions.icon = L.icon({
                 iconUrl: marker.toUrl,
@@ -104,7 +118,7 @@ function ResetCenterView(props) {
             }
           } else {
             if (!marker.pathUrl) {
-              console.error('Intermediate marker URL is not defined');
+              console.error("Intermediate marker URL is not defined");
             } else {
               markerOptions.icon = L.icon({
                 iconUrl: marker.pathUrl,
@@ -129,7 +143,7 @@ function ResetCenterView(props) {
 
     return () => {
       if (routeControlRef.current) {
-        console.log('Cleaning up routing control');
+        console.log("Cleaning up routing control");
         map.removeControl(routeControlRef.current);
         routeControlRef.current = null;
       }
@@ -143,7 +157,7 @@ function ResetCenterView(props) {
     device,
     marker,
     map,
-    routingSystem
+    routingSystem,fromLocation
   ]);
 
   return null;
@@ -195,9 +209,17 @@ const MapViewSwitch = ({ mapLayerType, setAttributes, options }) => {
   return null;
 };
 
-const OsmBack = ({ attributes, setAttributes, device}) => {
+const OsmBack = ({ attributes, setAttributes, device }) => {
   const { cId, map, options, layout, style } = attributes;
-  const { selectPosition,selectFromPosition,selectDestinationPosition, marker, routeDirection,searchQuery,routingSystem } = map;
+  const {
+    selectPosition,
+    selectFromPosition,
+    selectDestinationPosition,
+    marker,
+    routeDirection,
+    searchQuery,
+    routingSystem,
+  } = map;
   const { fromLocation, toLocation } = routeDirection;
   const routingControlRef = useRef(null);
   const {
@@ -207,12 +229,20 @@ const OsmBack = ({ attributes, setAttributes, device}) => {
     mapLayerType,
     isFullScreen,
     isViewMyLocation,
-   isDownloadPDF
+    isDownloadPDF,
   } = options;
-  const { markerColumns,selfMarkerColumns, othersMarkerColumns, pathMarkerColumns } = layout;
+  const {
+    markerColumns,
+    selfMarkerColumns,
+    othersMarkerColumns,
+    pathMarkerColumns,
+  } = layout;
   const [mapKey, setMapKey] = useState(0);
   const mapInstance = useRef(null);
-  const locationSelection = [  selectPosition?.lat || 25.7494, selectPosition?.lon || 89.2611 ];
+  const locationSelection = [
+    selectPosition?.lat || 25.7494,
+    selectPosition?.lon || 89.2611,
+  ];
 
   // position and icon info
   const position = [
@@ -221,7 +251,7 @@ const OsmBack = ({ attributes, setAttributes, device}) => {
   ];
   const icon = L.icon({
     iconUrl: marker.currentUrl,
-    iconSize: [ markerColumns.width[device], markerColumns.height[device] ],
+    iconSize: [markerColumns.width[device], markerColumns.height[device]],
   });
 
   // for scrollWheelZoom etc...
@@ -234,7 +264,8 @@ const OsmBack = ({ attributes, setAttributes, device}) => {
     isMapLayer,
     style,
     isViewLatLon,
-    searchQuery,isDownloadPDF
+    searchQuery,
+    isDownloadPDF,
   ]);
 
   // get self location
@@ -273,69 +304,79 @@ const OsmBack = ({ attributes, setAttributes, device}) => {
     setAttributes,
   ]);
 
+
   // from and destination distance
   const RoutingControl = () => {
     const map = useMap();
 
-      useEffect(() => {
+    useEffect(() => {
+      if (routingControlRef.current) {
+        map.removeControl(routingControlRef.current);
+        routingControlRef.current = null;
+      }
+
+      if (fromLocation && toLocation) {
+        const fromLatLng = L.latLng(fromLocation.lat, fromLocation.lon);
+        const toLatLng = L.latLng(toLocation.lat, toLocation.lon);
+
+        routingControlRef.current = L.Routing.control({
+          waypoints: [fromLatLng, toLatLng],
+          position: "topright",
+          // routeWhileDragging: true,
+          geocoder: L.Control.Geocoder.nominatim(),
+          createMarker: (i, waypoint, n) => {
+            let markerOptions = {};
+            if (i === 0) {
+              // Custom icon for the start point
+              markerOptions.icon = L.icon({
+                iconUrl: marker.fromUrl,
+                iconSize: [
+                  selfMarkerColumns.width[device],
+                  selfMarkerColumns.height[device],
+                ],
+                iconAnchor: [12, 41],
+                popupAnchor: [1, -34],
+                shadowSize: [41, 41],
+              });
+            } else if (i === n - 1) {
+              // Custom icon for the end point
+              markerOptions.icon = L.icon({
+                iconUrl: marker.toUrl,
+                iconSize: [
+                  othersMarkerColumns.width[device],
+                  othersMarkerColumns.height[device],
+                ],
+                iconAnchor: [12, 41],
+                popupAnchor: [1, -34],
+                shadowSize: [41, 41],
+              });
+            } else {
+              // Custom icon for the intermediate points
+              markerOptions.icon = L.icon({
+                iconUrl: marker.pathUrl,
+                iconSize: [
+                  pathMarkerColumns.width[device],
+                  pathMarkerColumns.height[device],
+                ],
+                iconAnchor: [12, 41],
+                popupAnchor: [1, -34],
+                shadowSize: [41, 41],
+              });
+            }
+            return L.marker(waypoint.latLng, markerOptions);
+          },
+        }).addTo(map);
+      }
+
+      return () => {
         if (routingControlRef.current) {
           map.removeControl(routingControlRef.current);
           routingControlRef.current = null;
         }
-  
-        if (fromLocation && toLocation) {
-          const fromLatLng = L.latLng(fromLocation.lat, fromLocation.lon);
-          const toLatLng = L.latLng(toLocation.lat, toLocation.lon);
-  
-          routingControlRef.current = L.Routing.control({
-            waypoints: [fromLatLng, toLatLng],
-            position: 'topright',
-            // routeWhileDragging: true,
-            geocoder: L.Control.Geocoder.nominatim(),
-            createMarker: (i, waypoint, n) => {
-              let markerOptions = {};
-              if (i === 0) {
-                // Custom icon for the start point
-                markerOptions.icon = L.icon({
-                  iconUrl: marker.fromUrl,
-                  iconSize: [ selfMarkerColumns.width[device], selfMarkerColumns.height[device] ],
-                  iconAnchor: [12, 41],
-                  popupAnchor: [1, -34],
-                  shadowSize: [41, 41],
-                });
-              } else if (i === n - 1) {
-                // Custom icon for the end point
-                markerOptions.icon = L.icon({
-                  iconUrl: marker.toUrl,
-                  iconSize: [ othersMarkerColumns.width[device], othersMarkerColumns.height[device] ],
-                  iconAnchor: [12, 41],
-                  popupAnchor: [1, -34],
-                  shadowSize: [41, 41],
-                });
-              } else {
-                // Custom icon for the intermediate points
-                markerOptions.icon = L.icon({
-                  iconUrl: marker.pathUrl,
-                  iconSize: [ pathMarkerColumns.width[device], pathMarkerColumns.height[device] ],
-                  iconAnchor: [12, 41],
-                  popupAnchor: [1, -34],
-                  shadowSize: [41, 41],
-                });
-              }
-              return L.marker(waypoint.latLng, markerOptions);
-            },
-          }).addTo(map);
-        }
-  
-        return () => {
-          if (routingControlRef.current) {
-            map.removeControl(routingControlRef.current);
-            routingControlRef.current = null;
-          }
-        };
-      }, [map, fromLocation, toLocation,marker, device]);
-  
-      return null;
+      };
+    }, [map, fromLocation, toLocation, marker, device]);
+
+    return null;
   };
 
   // self location by map button
@@ -383,10 +424,11 @@ const OsmBack = ({ attributes, setAttributes, device}) => {
         ".leaflet-control-fullscreen-button"
       );
       if (fullscreenButton) {
-        fullscreenButton.style.backgroundImage = 'url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRp9Uvyf1t_DCNvQ_-qklxJ5QYnk_G2W843sQ&s")';
+        fullscreenButton.style.backgroundImage =
+          'url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRp9Uvyf1t_DCNvQ_-qklxJ5QYnk_G2W843sQ&s")';
         fullscreenButton.style.backgroundPosition = "center center";
         fullscreenButton.style.backgroundSize = "cover";
-        fullscreenButton.title = 'Full Screen';
+        fullscreenButton.title = "Full Screen";
       }
       map.on("fullscreenchange", () => {
         if (map.isFullscreen()) {
@@ -404,50 +446,10 @@ const OsmBack = ({ attributes, setAttributes, device}) => {
     return null;
   };
 
-  // Create toggleVisibility function
-  const toggleVisibility = (selector, visible) => {
-    const elements = document.querySelectorAll(selector);
-    elements.forEach((element) => {
-        if (visible) {
-            element.classList.remove('hidden');
-        } else {
-            element.classList.add('hidden');
-        }
-    });
-};
-
- const downloadPDF = async () => {
-  // Hide unnecessary elements except the map and marker
-  toggleVisibility('.leaflet-control-container, .mapViewSwitch, .leaflet-popup-pane', false);
-
-  // Capture map as canvas
-  const mapElement = document.querySelector('.leaflet-container');
-  const canvas = await html2canvas(mapElement, {
-      useCORS: true,
-      logging: true,
-      backgroundColor: null,
-  });
-
-  // Generate PDF
-  const pdf = new jsPDF({
-      orientation: 'landscape',
-      unit: 'px',
-      format: [canvas.width, canvas.height]
-  });
-  const imgData = canvas.toDataURL('image/png');
-  pdf.addImage(imgData, 'PNG', 0, 0, canvas.width, canvas.height);
-  pdf.save('map.pdf');
-
-  // Restore visibility of all elements
-  toggleVisibility('.leaflet-control-container, .mapViewSwitch, .leaflet-popup-pane', true);
-};
-
   return (
     <>
-       {/* style */} 
+      {/* style */}
       <Style attributes={attributes}></Style>
-       {/* Add the download button */}
-      {isDownloadPDF && <button onClick={downloadPDF} >Download Location</button>}
       {/* Backend Map */}
       <div id={`osmHelloBlock-${cId}`}>
         <div className="maps">
@@ -470,13 +472,10 @@ const OsmBack = ({ attributes, setAttributes, device}) => {
               />
             )}
             <Marker position={locationSelection} icon={icon}>
-              <Popup>
-                {searchQuery ? searchQuery : 'Rangpur'}
-              </Popup>
+              <Popup>{searchQuery ? searchQuery : "Rangpur"}</Popup>
             </Marker>
-
             {/* Destination */}
-            { routingSystem === 'routingControl' && <RoutingControl/>}
+            {routingSystem === "routingControl" && <RoutingControl />}
 
             {/* resetCenterView */}
             <ResetCenterView
@@ -490,9 +489,10 @@ const OsmBack = ({ attributes, setAttributes, device}) => {
               device={device}
               marker={marker}
               routingSystem={routingSystem}
+              fromLocation={fromLocation}
             />
             {/* self location by map button */}
-            {isViewMyLocation  && <GeolocationControl />}
+            {isViewMyLocation && <GeolocationControl />}
 
             {/* full screen button in map */}
             {isFullScreen && <FullscreenControl />}
@@ -508,8 +508,6 @@ const OsmBack = ({ attributes, setAttributes, device}) => {
               )}
             </div>
           </MapContainer>
-           
-            
         </div>
       </div>
     </>
