@@ -11,6 +11,29 @@ import "leaflet/dist/leaflet.css";
 import React, { useEffect, useRef, useState } from "react";
 import { MapContainer, Marker, Popup, TileLayer, useMap } from "react-leaflet";
 import Style from "../Style/Style";
+import { jsPDF } from "jspdf";
+import html2canvas from "html2canvas";
+// MapPrint.js
+import 'leaflet-easyprint';
+
+
+
+
+function MapPrint(props) {
+  const map = useMap();
+  useEffect(() => {
+    const control = L.easyPrint({
+      ...props
+    });
+    map.addControl(control)
+    return () => {
+      map.removeControl(control);
+    }
+  }, [map]);
+
+
+  return null;
+}
 
 // set froma nd des location
 function ResetCenterView(props) {
@@ -175,13 +198,13 @@ const MapViewSwitch = ({ mapLayerType, setAttributes, options }) => {
         <button title="Default Layer" class="mapViewBtn ${
           mapLayerType === "default" ? "active" : ""
         }" id="defaultView">
-        <img src="https://shorturl.at/oUNQQ" alt="default" />
+        <img src="https://miro.medium.com/v2/resize:fit:1000/0*idSeNUx2osBb9Ci8.jpg" alt="default" />
         </button>
         <div class="vertical-divider"></div>
         <button title="Satellite Layer" class="mapViewBtn ${
           mapLayerType === "satellite" ? "active" : ""
         }" id="satelliteView">
-        <img src="https://shorturl.at/8r4L1" alt="satellite" />
+        <img src="https://cdn.theatlantic.com/thumbor/QQ8JrhfozhWpQToWfoPo7gi4Ao8=/0x36:1460x857/720x405/media/img/mt/2016/06/Screen_Shot_2016_06_27_at_12.59.14_PM/original.png" alt="satellite" />
         </button>
       `;
       L.DomEvent.on(div, "click", (e) => {
@@ -446,6 +469,45 @@ const OsmBack = ({ attributes, setAttributes, device }) => {
     return null;
   };
 
+  const toggleVisibility = (selector, visible) => {
+    const elements = document.querySelectorAll(selector);
+    elements.forEach((element) => {
+        if (visible) {
+            element.classList.remove('hidden');
+        } else {
+            element.classList.add('hidden');
+        }
+    });
+};
+
+const downloadPDF = async () => {
+  toggleVisibility('.leaflet-control-container, .mapViewSwitch, .leaflet-popup-pane', false);
+
+  const mapElement = document.querySelector('.leaflet-container');
+  
+  mapElement.style.width = `${mapElement.offsetWidth}px`;
+  mapElement.style.height = `${mapElement.offsetHeight}px`;
+
+  const canvas = await html2canvas(mapElement, {
+      useCORS: true,
+      logging: true,
+      backgroundColor: null,
+  });
+
+  const imgData = canvas.toDataURL('image/png');
+
+  const pdf = new jsPDF({
+      orientation: 'landscape',
+      unit: 'px',
+      format: [canvas.width, canvas.height]
+  });
+
+  pdf.addImage(imgData, 'PNG', 0, 0, canvas.width, canvas.height);
+  pdf.save('map.pdf');
+
+  toggleVisibility('.leaflet-control-container, .mapViewSwitch, .leaflet-popup-pane', true);
+};
+
   return (
     <>
       {/* style */}
@@ -453,6 +515,7 @@ const OsmBack = ({ attributes, setAttributes, device }) => {
       {/* Backend Map */}
       <div id={`osmHelloBlock-${cId}`}>
         <div className="maps">
+        {isDownloadPDF && <button onClick={downloadPDF}>Download Location</button>}
           <MapContainer
             key={mapKey}
             center={position}
@@ -507,6 +570,16 @@ const OsmBack = ({ attributes, setAttributes, device }) => {
                 />
               )}
             </div>
+            {/* pdf */}
+            {
+              isDownloadPDF && (
+                <div>
+                    <MapPrint position="topleft" sizeModes={['Current', 'A4Portrait', 'A4Landscape']} hideControlContainer={false} title="Print" />
+                    <MapPrint position="topleft" sizeModes={['Current', 'A4Portrait', 'A4Landscape']} hideControlContainer={false} title="Export as PNG" exportOnly />
+                </div>
+              )
+            }
+        
           </MapContainer>
         </div>
       </div>

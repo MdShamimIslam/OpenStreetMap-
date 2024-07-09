@@ -17,20 +17,10 @@ const Edit = (props) => {
   const [fromSearchText, setFromSearchText] = useState(map.fromSearchQuery);
   // destination search state
   const [desSearchText, setDesSearchText] = useState(map.DesSearchQuery);
+  
   // Handle Search
   const handleSearch = (query) => {
-    const params = {
-      q: query,
-      format: "json",
-      addressDetails: 1,
-      polygon_geojson: 0,
-    };
-    const queryString = new URLSearchParams(params).toString();
-    const requestOptions = {
-      method: "GET",
-      redirect: "follow",
-    };
-    fetch(`${NOM_URL}${queryString}`, requestOptions)
+    fetch(`${NOM_URL}${query}`)
       .then((res) => res.text())
       .then((result) => {
         const arrayResult = JSON.parse(result);
@@ -49,34 +39,12 @@ const Edit = (props) => {
   };
   // Handle from Search
   const handleFromSearch = async (query) => {
-    const params = {
-      q: query,
-      format: "json",
-      addressDetails: 1,
-      polygon_geojson: 0,
-    };
-    const queryString = new URLSearchParams(params).toString();
-    const requestOptions = {
-      method: "GET",
-      redirect: "follow",
-    };
-   const response = await fetch(`${NOM_URL}${queryString}`, requestOptions)
+   const response = await fetch(`${NOM_URL}${query}`);
    return await response.json();
   };
   // Handle destination Search
   const handleDesSearch = async (query) => {
-    const params = {
-      q: query,
-      format: "json",
-      addressDetails: 1,
-      polygon_geojson: 0,
-    };
-    const queryString = new URLSearchParams(params).toString();
-    const requestOptions = {
-      method: "GET",
-      redirect: "follow",
-    };
-    const response = await fetch(`${NOM_URL}${queryString}`, requestOptions)
+    const response = await fetch(`${NOM_URL}${query}`);
     return await response.json();
   };
 
